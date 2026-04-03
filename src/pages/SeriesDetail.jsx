@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { isMovie, getMovieStreamUrl } from '@/constants/contentType';
 import { readActiveProfile } from '@/lib/activeProfile';
 import { useLiveEntityList } from '@/hooks/useLiveEntityList';
+import { buildVideoSource } from '@/lib/videoSource';
 
 export default function SeriesDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -177,7 +178,7 @@ export default function SeriesDetail() {
 
       {/* Episódios (séries) ou bloco de filme por URL própria */}
       <div className="px-4 md:px-12 py-8 max-w-5xl">
-        {assistirFilme && episodes.length === 0 ? (
+        {assistirFilme ? (
           <div className="rounded-xl border border-white/10 bg-[#1A1A1A]/80 p-8 text-center">
             <h2 className="text-xl font-bold text-white mb-2">{series.title}</h2>
             <p className="text-gray-400 text-sm max-w-md mx-auto">
@@ -215,7 +216,7 @@ export default function SeriesDetail() {
           {seasonEpisodes.map((ep, i) => {
             const progress = getEpisodeProgress(ep.id);
             const duration = formatDuration(ep.duration);
-            const isLocked = !ep.video_url;
+            const isLocked = !buildVideoSource(ep)?.url;
 
             const rowContent = (
               <>

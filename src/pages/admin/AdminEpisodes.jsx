@@ -7,9 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { isLikelyBunnyUrl } from '@/config/bunny';
 import { isMovie } from '@/constants/contentType';
 import { useLiveEntityList } from '@/hooks/useLiveEntityList';
+import {
+  buildVideoSource,
+  getVideoSourceLabel,
+  getVideoValidationMessage,
+  normalizeVideoFields,
+} from '@/lib/videoSource';
 
 export default function AdminEpisodes() {
   const params = new URLSearchParams(window.location.search);
@@ -17,7 +22,16 @@ export default function AdminEpisodes() {
   const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ title: '', season: 1, number: 1, description: '', video_url: '', duration: '', thumbnail_url: '' });
+  const [form, setForm] = useState({
+    title: '',
+    season: 1,
+    number: 1,
+    description: '',
+    videoUrl: '',
+    trailerUrl: '',
+    duration: '',
+    thumbnail_url: '',
+  });
 
   const { data: seriesRows = [] } = useLiveEntityList({
     entity: base44.entities.Series,
@@ -62,7 +76,8 @@ export default function AdminEpisodes() {
       season: isFilme ? 1 : lastSeason,
       number: isFilme ? 1 : nextNum,
       description: '',
-      video_url: '',
+      videoUrl: '',
+      trailerUrl: '',
       duration: '',
       thumbnail_url: '',
     });
@@ -73,7 +88,9 @@ export default function AdminEpisodes() {
     setEditing(ep);
     setForm({
       title: ep.title || '', season: ep.season || 1, number: ep.number || 1,
-      description: ep.description || '', video_url: ep.video_url || '',
+      description: ep.description || '',
+      videoUrl: ep.videoUrl || ep.video_url || '',
+      trailerUrl: ep.trailerUrl || ep.trailer_url || '',
       duration: ep.duration || '', thumbnail_url: ep.thumbnail_url || '',
     });
     setDialogOpen(true);
@@ -82,7 +99,28 @@ export default function AdminEpisodes() {
   const closeDialog = () => { setDialogOpen(false); setEditing(null); };
 
   const handleSubmit = () => {
-    const data = { ...form, season: Number(form.season), number: Number(form.number), duration: form.duration ? Number(form.duration) : undefined };
+    const videoError = getVideoValidationMessage(form.videoUrl);
+    const trailerError = getVideoValidationMessage(form.trailerUrl);
+    if (videoError) {
+      alert(videoError);
+      return;
+    }
+    if (trailerError) {
+      alert(trailerError);
+      return;
+    }
+    const data = {
+      ...form,
+      season: Number(form.season),
+      number: Number(form.number),
+      duration: form.duration ? Number(form.duration) : undefined,
+    };
+    delete data.videoUrl;
+    delete data.trailerUrl;
+    Object.assign(data, normalizeVideoFields({
+      videoUrl: form.videoUrl,
+      trailerUrl: form.trailerUrl,
+    }));
     if (editing) {
       updateMut.mutate({ id: editing.id, data });
     } else {
@@ -91,6 +129,7 @@ export default function AdminEpisodes() {
   };
 
   const isFilme = series && isMovie(series);
+  const detectedEpisodeSource = buildVideoSource(form.videoUrl);
 
   const videoUrlBlock = (
     <div className="space-y-2 rounded-lg border border-[#E50914]/30 bg-[#E50914]/5 p-4">
@@ -99,29 +138,31 @@ export default function AdminEpisodes() {
         <span className="text-[#E50914] font-normal"> *</span>
       </p>
       <p className="text-xs text-gray-400 leading-relaxed">
-        Cole o link público: Bunny (iframe ou CDN), Google Drive ou ficheiro .mp4/.webm. Sem URL o player não reproduz.
+        Cole a URL do vídeo. Bunny.net é prioridade, mas também aceitamos HLS, MP4, Vimeo, YouTube, Google Drive e embeds compatíveis.
       </p>
       <Input
-        placeholder="https://iframe.mediadelivery.net/embed/... ou https://...b-cdn.net/.../video.mp4"
-        value={form.video_url}
-        onChange={(e) => setForm({ ...form, video_url: e.target.value })}
+        placeholder="https://iframe.mediadelivery.net/embed/... ou https://.../video.m3u8"
+        value={form.videoUrl}
+        onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
         className="bg-[#2A2A2A] border border-white/10 text-white"
       />
-      {form.video_url && isLikelyBunnyUrl(form.video_url) && !form.video_url.toLowerCase().includes('mediadelivery') && (
-        <p className="text-xs text-blue-400">Bunny CDN — reprodução em &lt;video&gt; (MP4/WebM; HLS pode variar por browser).</p>
-      )}
-      {form.video_url && form.video_url.toLowerCase().includes('mediadelivery') && (
-        <p className="text-xs text-blue-400">Bunny Stream — player em iframe (recomendado).</p>
-      )}
-      {form.video_url && form.video_url.includes('drive.google.com') && (
-        <p className="text-xs text-green-500">Google Drive (preview em iframe).</p>
-      )}
-      {form.video_url &&
-        !isLikelyBunnyUrl(form.video_url) &&
-        !form.video_url.includes('drive.google.com') &&
-        /\.(mp4|webm)(\?|$)/i.test(form.video_url) && (
-          <p className="text-xs text-gray-400">Ficheiro direto — &lt;video&gt; nativo.</p>
-        )}
+      <div className="grid grid-cols-2 gap-2 text-[11px]">
+        <div className="rounded-md bg-black/20 px-3 py-2 text-gray-300">
+          <span className="text-gray-500">Provedor:</span>{' '}
+          <strong>{detectedEpisodeSource?.provider || 'não detectado'}</strong>
+        </div>
+        <div className="rounded-md bg-black/20 px-3 py-2 text-gray-300">
+          <span className="text-gray-500">Tipo:</span>{' '}
+          <strong>{detectedEpisodeSource?.type || 'não detectado'}</strong>
+        </div>
+      </div>
+      <Input
+        placeholder="Trailer (opcional)"
+        value={form.trailerUrl}
+        onChange={(e) => setForm({ ...form, trailerUrl: e.target.value })}
+        className="bg-[#2A2A2A] border border-white/10 text-white"
+      />
+      <p className="text-xs text-gray-500">Detectado: {getVideoSourceLabel(detectedEpisodeSource)}</p>
     </div>
   );
 
@@ -143,10 +184,18 @@ export default function AdminEpisodes() {
               </p>
             )}
           </div>
-          <Button onClick={openCreate} className="bg-[#E50914] hover:bg-[#FF3D3D]">
-            <Plus className="w-4 h-4 mr-2" /> {isFilme ? 'Adicionar o Filme' : 'Novo Episódio'}
-          </Button>
+          {!isFilme && (
+            <Button onClick={openCreate} className="bg-[#E50914] hover:bg-[#FF3D3D]">
+              <Plus className="w-4 h-4 mr-2" /> Novo Episódio
+            </Button>
+          )}
         </div>
+
+        {isFilme && (
+          <div className="mb-6 rounded-lg border border-[#E50914]/30 bg-[#E50914]/5 p-4 text-sm text-gray-300">
+            A URL principal do filme agora é gerida em <strong>Admin &gt; Séries e Filmes</strong>. Esta tela fica reservada para episódios de séries e compatibilidade com dados antigos.
+          </div>
+        )}
 
         <div className="space-y-2">
           {sorted.map(ep => (
@@ -173,7 +222,7 @@ export default function AdminEpisodes() {
           ))}
           {episodes.length === 0 && (
             <div className="text-center py-12 text-gray-500">
-              <p>{isFilme ? 'Nenhum vídeo do filme cadastrado. Use “Adicionar o Filme” e cole a URL.' : 'Nenhum episódio cadastrado.'}</p>
+              <p>{isFilme ? 'Nenhum episódio legado encontrado para este filme.' : 'Nenhum episódio cadastrado.'}</p>
             </div>
           )}
         </div>
@@ -213,12 +262,6 @@ export default function AdminEpisodes() {
                     value={form.description}
                     onChange={(e) => setForm({ ...form, description: e.target.value })}
                     className="bg-[#2A2A2A] border-none h-20"
-                  />
-                  <Input
-                    placeholder="URL da thumbnail (opcional)"
-                    value={form.thumbnail_url}
-                    onChange={(e) => setForm({ ...form, thumbnail_url: e.target.value })}
-                    className="bg-[#2A2A2A] border-none"
                   />
                 </>
               ) : (

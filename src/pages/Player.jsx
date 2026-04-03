@@ -3,10 +3,11 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Play, SkipForward, List, X } from 'lucide-react';
-import { getVideoEmbedUrl } from '@/lib/videoEmbed';
 import { isMovie, getMovieStreamUrl } from '@/constants/contentType';
 import { readActiveProfile } from '@/lib/activeProfile';
 import { useLiveEntityList } from '@/hooks/useLiveEntityList';
+import SmartPlayer from '@/components/player/SmartPlayer';
+import { buildVideoSource } from '@/lib/videoSource';
 
 export default function Player() {
   const params = new URLSearchParams(window.location.search);
@@ -80,15 +81,12 @@ export default function Player() {
     ? sortedEpisodes[currentIndex + 1]
     : null;
 
-  const embedUrl = useMemo(() => {
+  const videoSource = useMemo(() => {
     if (isMoviePlayback) {
-      return getVideoEmbedUrl(getMovieStreamUrl(series));
+      return buildVideoSource(series);
     }
-    return getVideoEmbedUrl(episode?.video_url);
-  }, [isMoviePlayback, series, episode?.video_url]);
-
-  const isBunnyStream = embedUrl?.type === 'bunny-stream';
-  const isBunnyPlayer = embedUrl?.type === 'bunny-player';
+    return buildVideoSource(episode);
+  }, [isMoviePlayback, series, episode]);
   const mediaKey = isMoviePlayback ? `movie-${seriesIdParam}` : episodeId;
 
   // Autoplay on episode end (só fluxo por episódio)
@@ -227,67 +225,27 @@ export default function Player() {
 
         {/* Video */}
         <div className="w-full aspect-video bg-black flex items-center justify-center relative">
-          {embedUrl ? (
-            isBunnyPlayer ? (
-              <iframe
-                key={mediaKey}
-                src={embedUrl.url}
-                className="w-full h-full"
-                frameBorder="0"
-                scrolling="no"
-                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; gyroscope; accelerometer"
-                allowFullScreen
-                webkitallowfullscreen="true"
-                mozallowfullscreen="true"
-                {...{
-                  'x5-playsinline': 'true',
-                  'x5-video-player-fullscreen': 'true',
-                }}
-              />
-            ) : isBunnyStream ? (
-              <video
-                key={mediaKey}
-                src={embedUrl.url}
-                className="w-full h-full"
-                controls
-                autoPlay
-                playsInline
-                {...{
-                  'x5-playsinline': 'true',
-                  'x5-video-player-type': 'h5',
-                  'x5-video-player-fullscreen': 'true',
-                }}
-                onEnded={() => {
-                  if (isMoviePlayback || !nextEpisode) return;
-                  let countdown = 3;
+          {videoSource ? (
+            <SmartPlayer
+              key={mediaKey}
+              source={videoSource}
+              title={isMoviePlayback ? series?.title : episode?.title}
+              poster={episode?.thumbnail_url || series?.cover_url}
+              autoplay
+              onEnded={() => {
+                if (isMoviePlayback || !nextEpisode) return;
+                let countdown = 3;
+                setAutoplayCountdown(countdown);
+                const countdownInterval = setInterval(() => {
+                  countdown--;
                   setAutoplayCountdown(countdown);
-                  const countdownInterval = setInterval(() => {
-                    countdown--;
-                    setAutoplayCountdown(countdown);
-                    if (countdown === 0) {
-                      clearInterval(countdownInterval);
-                      navigate(`/Player?episodeId=${nextEpisode.id}`);
-                    }
-                  }, 1000);
-                }}
-              />
-            ) : (
-              <iframe
-                key={mediaKey}
-                src={embedUrl.url}
-                className="w-full h-full"
-                frameBorder="0"
-                scrolling="no"
-                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; gyroscope; accelerometer"
-                allowFullScreen
-                webkitallowfullscreen="true"
-                mozallowfullscreen="true"
-                {...{
-                  'x5-playsinline': 'true',
-                  'x5-video-player-fullscreen': 'true',
-                }}
-              />
-            )
+                  if (countdown === 0) {
+                    clearInterval(countdownInterval);
+                    navigate(`/Player?episodeId=${nextEpisode.id}`);
+                  }
+                }, 1000);
+              }}
+            />
           ) : (
             <div className="text-center">
               <Play className="w-16 h-16 text-gray-600 mx-auto mb-4" />
@@ -295,7 +253,7 @@ export default function Player() {
                 {isMoviePlayback ? 'Nenhum vídeo disponível para este filme.' : 'Nenhum vídeo disponível para este episódio.'}
               </p>
               <p className="text-xs text-gray-600 mt-2">
-                Use uma URL Bunny (Stream iframe ou CDN .mp4), Google Drive ou MP4 público. Ver docs/bunny-net.md
+                Use uma URL Bunny, HLS, MP4, Vimeo, YouTube ou embed externo compativel.
               </p>
             </div>
           )}

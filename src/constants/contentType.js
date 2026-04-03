@@ -1,4 +1,6 @@
 /** Tipo de catálogo (mesma entidade `Series`, vídeos em `Episode` como nas séries) */
+import { buildVideoSource } from '@/lib/videoSource';
+
 export const CONTENT_TYPE_SERIES = 'series';
 export const CONTENT_TYPE_MOVIE = 'movie';
 
@@ -17,6 +19,5 @@ export function isSeriesContent(s) {
  */
 export function getMovieStreamUrl(s) {
   if (!isMovie(s)) return '';
-  const u = s?.movie_url;
-  return typeof u === 'string' ? u.trim() : '';
+  return buildVideoSource(s)?.url || '';
 }

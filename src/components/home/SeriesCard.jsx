@@ -4,6 +4,7 @@ import { Play, Plus, Check, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { isMovie, getMovieStreamUrl } from '@/constants/contentType';
 import { imageUrlWithCacheBust } from '@/lib/imageCacheBust';
+import { buildVideoSource } from '@/lib/videoSource';
 
 export default function SeriesCard({
   series,
@@ -23,7 +24,7 @@ export default function SeriesCard({
 
   const seriesEpisodes = episodes.filter(e => e.series_id === series.id);
   const hasNoEpisodes = seriesEpisodes.length === 0;
-  const hasAtLeastOneLink = seriesEpisodes.some(e => !!e.video_url);
+  const hasAtLeastOneLink = seriesEpisodes.some((e) => !!buildVideoSource(e)?.url);
   const movieStreamUrl = getMovieStreamUrl(series);
   const filmePronto = isMovie(series) && !!movieStreamUrl;
   const showComingSoon = !hideComingSoon && (

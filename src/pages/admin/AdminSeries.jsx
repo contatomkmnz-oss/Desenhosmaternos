@@ -52,6 +52,12 @@ import { HOME_SECTION_SELECT_NONE } from '@/data/siteContent';
 import { L, NETFLIX_HOME_ROW_ORDER } from '@/data/netflixRowOrder';
 import { resolveHostedImageUrl } from '@/lib/resolveHostedImageUrl';
 import { getIndirectImageHostMessage } from '@/lib/validateDirectImageUrl';
+import {
+  buildVideoSource,
+  getVideoSourceLabel,
+  getVideoValidationMessage,
+  normalizeVideoFields,
+} from '@/lib/videoSource';
 import { toast } from 'sonner';
 import { useLiveEntityList } from '@/hooks/useLiveEntityList';
 
@@ -67,8 +73,8 @@ export default function AdminSeries() {
     year: '',
     cover_url: '',
     banner_url: '',
-    /** Apenas filmes: URL de reprodução (independente de episódios) */
-    movie_url: '',
+    videoUrl: '',
+    trailerUrl: '',
     published: true,
     featured: false,
     age_rating: 'Livre',
@@ -118,7 +124,8 @@ export default function AdminSeries() {
       year: '',
       cover_url: '',
       banner_url: '',
-      movie_url: '',
+      videoUrl: '',
+      trailerUrl: '',
       published: true,
       featured: false,
       age_rating: 'Livre',
@@ -138,7 +145,8 @@ export default function AdminSeries() {
       year: s.year || '',
       cover_url: s.cover_url || '',
       banner_url: s.banner_url || '',
-      movie_url: s.movie_url || '',
+      videoUrl: s.videoUrl || s.movie_url || '',
+      trailerUrl: s.trailerUrl || s.trailer_url || '',
       published: s.published !== false,
       featured: s.featured || false,
       age_rating: s.age_rating || 'Livre',
@@ -179,9 +187,24 @@ export default function AdminSeries() {
         toast.success('Link do banner convertido automaticamente.');
       }
 
+      const movieVideoError =
+        form.content_type === CONTENT_TYPE_MOVIE
+          ? getVideoValidationMessage(form.videoUrl)
+          : '';
+      const trailerError = getVideoValidationMessage(form.trailerUrl);
+      if (movieVideoError) {
+        toast.error('URL do filme inválida', { description: movieVideoError });
+        return;
+      }
+      if (trailerError) {
+        toast.error('URL do trailer inválida', { description: trailerError });
+        return;
+      }
+
       const data = { ...form, year: form.year ? Number(form.year) : undefined };
       delete data.categoriesText;
-      data.movie_url = form.content_type === CONTENT_TYPE_MOVIE ? (form.movie_url || '').trim() : '';
+      delete data.videoUrl;
+      delete data.trailerUrl;
       if (form.content_type === CONTENT_TYPE_MOVIE) {
         const cats = (form.categoriesText || '')
           .split('\n')
@@ -189,8 +212,23 @@ export default function AdminSeries() {
           .filter(Boolean);
         data.categories = cats;
         data.category = cats.join(', ');
+        Object.assign(
+          data,
+          normalizeVideoFields(
+            {
+              videoUrl: form.videoUrl,
+              trailerUrl: form.trailerUrl,
+            },
+            { legacyField: 'movie_url' }
+          )
+        );
       } else {
         delete data.categories;
+        data.videoUrl = '';
+        data.trailerUrl = '';
+        data.videoProvider = '';
+        data.videoType = '';
+        data.movie_url = '';
       }
       data.cover_url = resolvedCover;
       data.banner_url = resolvedBanner;
@@ -211,6 +249,9 @@ export default function AdminSeries() {
     if (listFilter === 'movie') return s.content_type === CONTENT_TYPE_MOVIE;
     return true;
   });
+
+  const detectedMovieSource =
+    form.content_type === CONTENT_TYPE_MOVIE ? buildVideoSource(form.videoUrl) : null;
 
   return (
     <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
@@ -269,9 +310,11 @@ export default function AdminSeries() {
                 </p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <Link to={`/AdminEpisodes?seriesId=${s.id}`} className="text-xs text-[#E50914] hover:text-[#FF3D3D] px-3 py-1 border border-[#E50914] rounded">
-                  {s.content_type === CONTENT_TYPE_MOVIE ? 'Vídeos' : 'Episódios'}
-                </Link>
+                {s.content_type !== CONTENT_TYPE_MOVIE && (
+                  <Link to={`/AdminEpisodes?seriesId=${s.id}`} className="text-xs text-[#E50914] hover:text-[#FF3D3D] px-3 py-1 border border-[#E50914] rounded">
+                    Episódios
+                  </Link>
+                )}
                 <button onClick={() => openEdit(s)} className="p-2 text-gray-400 hover:text-white"><Pencil className="w-4 h-4" /></button>
                 <button onClick={() => { if (confirm('Excluir série?')) deleteMut.mutate(s.id); }} className="p-2 text-gray-400 hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
               </div>
@@ -313,7 +356,7 @@ export default function AdminSeries() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value={CONTENT_TYPE_SERIES}>Série (episódios)</SelectItem>
-                    <SelectItem value={CONTENT_TYPE_MOVIE}>Filme (mesmo fluxo de vídeos)</SelectItem>
+                    <SelectItem value={CONTENT_TYPE_MOVIE}>Filme (URL própria)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -321,14 +364,33 @@ export default function AdminSeries() {
                 <div className="rounded-lg border border-[#E50914]/40 bg-[#E50914]/5 p-4 space-y-2">
                   <p className="text-xs font-semibold text-[#E50914] uppercase tracking-wide">URL do filme</p>
                   <p className="text-[11px] text-gray-400 leading-snug">
-                    Cole a URL do vídeo (Bunny, Drive ou MP4). Este campo é só para filmes e não substitui episódios de séries.
+                    Cole a URL do vídeo do filme. Bunny.net é prioridade, mas também aceitamos HLS, MP4, Vimeo, YouTube e embeds compatíveis.
                   </p>
                   <Input
                     placeholder="https://…"
-                    value={form.movie_url}
-                    onChange={(e) => setForm({ ...form, movie_url: e.target.value })}
+                    value={form.videoUrl}
+                    onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
                     className="bg-[#141414] border border-white/10 font-mono text-sm"
                   />
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="rounded-md bg-black/20 px-3 py-2 text-gray-300">
+                      <span className="text-gray-500">Provedor:</span>{' '}
+                      <strong>{detectedMovieSource?.provider || 'não detectado'}</strong>
+                    </div>
+                    <div className="rounded-md bg-black/20 px-3 py-2 text-gray-300">
+                      <span className="text-gray-500">Tipo:</span>{' '}
+                      <strong>{detectedMovieSource?.type || 'não detectado'}</strong>
+                    </div>
+                  </div>
+                  <Input
+                    placeholder="Trailer (opcional)"
+                    value={form.trailerUrl}
+                    onChange={(e) => setForm({ ...form, trailerUrl: e.target.value })}
+                    className="bg-[#141414] border border-white/10 font-mono text-sm"
+                  />
+                  <p className="text-[11px] text-gray-500">
+                    Detectado: {getVideoSourceLabel(detectedMovieSource)}
+                  </p>
                 </div>
               )}
               <Input placeholder="Título" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="bg-[#2A2A2A] border-none" />
