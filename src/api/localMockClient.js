@@ -240,14 +240,22 @@ async function getCurrentUser() {
   const baseUser = users[0] || {
     id: 'user-demo-1',
     email: 'demo@local.dev',
-    role: 'admin',
+    role: 'user',
     activated: true,
   };
+  const {
+    role: _ignoredRole,
+    admin: _ignoredAdmin,
+    is_admin: _ignoredIsAdmin,
+    claims: _ignoredClaims,
+    customClaims: _ignoredCustomClaims,
+    ...baseUserProfile
+  } = baseUser;
 
   const firebaseUser = firebaseEnabled ? firebaseAuth?.currentUser : null;
   if (firebaseUser) {
     cachedUser = withAdminRole({
-      ...baseUser,
+      ...baseUserProfile,
       id: firebaseUser.uid || baseUser.id,
       email: firebaseUser.email || baseUser.email,
       name: firebaseUser.displayName || baseUser.name,

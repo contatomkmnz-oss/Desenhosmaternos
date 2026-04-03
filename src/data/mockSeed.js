@@ -47,7 +47,7 @@ export function buildMockSeed() {
       {
         id: 'user-demo-1',
         email: 'demo@local.dev',
-        role: 'admin',
+        role: 'user',
         activated: true,
         created_date: now,
       },
