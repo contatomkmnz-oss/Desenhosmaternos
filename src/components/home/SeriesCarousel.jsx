@@ -93,7 +93,7 @@ export default function SeriesCarousel({
           type="button"
           aria-label="Anterior"
           onClick={() => scroll('left')}
-          className="absolute left-0 top-0 bottom-0 z-10 w-10 md:w-14 flex items-center justify-center bg-gradient-to-r from-[#0F0F0F] to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity"
+          className="hidden md:flex absolute left-0 top-0 bottom-0 z-10 w-10 md:w-14 items-center justify-center bg-gradient-to-r from-[#0F0F0F] to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity"
         >
           <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
         </button>
@@ -118,7 +118,7 @@ export default function SeriesCarousel({
           type="button"
           aria-label="Seguinte"
           onClick={() => scroll('right')}
-          className="absolute right-0 top-0 bottom-0 z-10 w-10 md:w-14 flex items-center justify-center bg-gradient-to-l from-[#0F0F0F] to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity"
+          className="hidden md:flex absolute right-0 top-0 bottom-0 z-10 w-10 md:w-14 items-center justify-center bg-gradient-to-l from-[#0F0F0F] to-transparent opacity-0 group-hover/carousel:opacity-100 transition-opacity"
         >
           <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
         </button>

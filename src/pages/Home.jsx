@@ -149,7 +149,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#0F0F0F]">
       <HeroBanner slides={heroSlides} />
 
-      <div className="-mt-10 md:-mt-20 relative z-10">
+      <div className="-mt-4 md:-mt-20 relative z-10">
         {NETFLIX_HOME_ROW_ORDER.map(({ slug, label }, rowIndex) => (
           <NetflixHomeRow
             key={slug}

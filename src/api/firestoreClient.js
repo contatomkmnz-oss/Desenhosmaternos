@@ -10,6 +10,7 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { db, firestoreEnabled } from '@/lib/firestore';
+import { resolveCatalogCoverUrl } from '@/lib/catalogArtwork';
 
 const COLLECTIONS = {
   Series: 'movies',
@@ -26,13 +27,22 @@ function toIso(value) {
   return undefined;
 }
 
-function normalizeRow(id, data) {
+function normalizeRow(id, data, collectionName) {
   const createdAt = toIso(data.createdAt) || data.created_date;
   const updatedAt = toIso(data.updatedAt) || data.updated_date;
+  const isSeriesCollection = collectionName === COLLECTIONS.Series;
+  const coverUrl = isSeriesCollection
+    ? resolveCatalogCoverUrl(data.cover_url, data.title)
+    : data.cover_url;
+  const bannerUrl = isSeriesCollection
+    ? data.banner_url || coverUrl
+    : data.banner_url;
 
   return {
     ...data,
     id,
+    cover_url: coverUrl,
+    banner_url: bannerUrl,
     createdAt,
     updatedAt,
     created_date: createdAt,
@@ -91,7 +101,7 @@ function limitRows(rows, limit) {
 async function loadCollection(collectionName) {
   if (!firestoreEnabled || !db) return [];
   const snapshot = await getDocs(collection(db, collectionName));
-  return snapshot.docs.map((item) => normalizeRow(item.id, item.data()));
+  return snapshot.docs.map((item) => normalizeRow(item.id, item.data(), collectionName));
 }
 
 async function syncCategoriesFromMovies() {
@@ -195,7 +205,7 @@ function createEntity(entityName) {
         ...payload,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      });
+      }, collectionName);
     },
 
     async update(id, data) {
@@ -246,7 +256,7 @@ function createEntity(entityName) {
         typeof queryOrCallback === 'function' ? queryOrCallback : maybeCallback;
 
       return onSnapshot(collection(db, collectionName), (snapshot) => {
-        const rows = snapshot.docs.map((item) => normalizeRow(item.id, item.data()));
+        const rows = snapshot.docs.map((item) => normalizeRow(item.id, item.data(), collectionName));
         const finalRows = limitRows(sortRows(filterRows(rows, query), sortField), limit);
         callback?.(finalRows);
       });

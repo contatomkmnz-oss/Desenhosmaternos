@@ -112,7 +112,7 @@ export default function SeriesDetail() {
   return (
     <div className="min-h-screen bg-[#141414]">
       {/* Banner — começa do topo (Navbar stack é transparente/sobreposta) */}
-      <div className="relative h-[55vh] md:h-[70vh]">
+      <div className="relative h-[52svh] min-h-[380px] md:h-[70vh]">
         {series.banner_url ? (
           <img src={series.banner_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
         ) : series.cover_url ? (
@@ -123,10 +123,10 @@ export default function SeriesDetail() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#141414]/80 to-transparent" />
 
-        <div className="absolute bottom-10 md:bottom-16 left-0 right-0 px-4 md:px-12">
+        <div className="absolute bottom-8 md:bottom-16 left-0 right-0 px-4 md:px-12">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-3 drop-shadow-lg">{series.title}</h1>
-            <div className="flex items-center gap-3 text-sm text-gray-300 mb-4 flex-wrap">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-3 drop-shadow-lg leading-[1.05]">{series.title}</h1>
+            <div className="flex items-center gap-x-3 gap-y-2 text-xs sm:text-sm text-gray-300 mb-4 flex-wrap">
               {series.year && <span className="text-[#46D369] font-semibold">{series.year}</span>}
               {isMovie(series) ? (
                 <span className="text-[#E50914] font-bold uppercase text-xs tracking-wider">Filme</span>
@@ -142,14 +142,14 @@ export default function SeriesDetail() {
               )}
               {series.category && <span className="text-gray-400 text-xs">{series.category}</span>}
             </div>
-            <p className="text-gray-200 max-w-xl text-sm md:text-base leading-relaxed mb-6 line-clamp-3">
+            <p className="text-gray-200 max-w-xl text-sm md:text-base leading-relaxed mb-5 md:mb-6 line-clamp-4">
               {series.description}
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               {assistirFilme && (
                 <Link
                   to={`/Player?seriesId=${seriesId}`}
-                  className="flex items-center gap-2 bg-white text-black px-6 py-2.5 rounded font-bold hover:bg-white/85 transition-all text-sm"
+                  className="flex items-center justify-center gap-2 bg-white text-black px-6 py-3 rounded font-bold hover:bg-white/85 transition-all text-sm"
                 >
                   <Play className="w-5 h-5 fill-current" />
                   Assistir
@@ -158,7 +158,7 @@ export default function SeriesDetail() {
               {!assistirFilme && firstEp && (
                 <Link
                   to={`/Player?episodeId=${firstEp.id}`}
-                  className="flex items-center gap-2 bg-white text-black px-6 py-2.5 rounded font-bold hover:bg-white/85 transition-all text-sm"
+                  className="flex items-center justify-center gap-2 bg-white text-black px-6 py-3 rounded font-bold hover:bg-white/85 transition-all text-sm"
                 >
                   <Play className="w-5 h-5 fill-current" />
                   Assistir
@@ -166,7 +166,7 @@ export default function SeriesDetail() {
               )}
               <button
                 onClick={() => isInList ? removeMut.mutate() : addMut.mutate()}
-                className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-5 py-2.5 rounded font-medium hover:bg-white/30 transition-all text-sm border border-white/40"
+                className="flex items-center justify-center gap-2 bg-white/20 backdrop-blur-sm px-5 py-3 rounded font-medium hover:bg-white/30 transition-all text-sm border border-white/40"
               >
                 {isInList ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 {isInList ? 'Na Lista' : 'Minha Lista'}
@@ -177,7 +177,7 @@ export default function SeriesDetail() {
       </div>
 
       {/* Episódios (séries) ou bloco de filme por URL própria */}
-      <div className="px-4 md:px-12 py-8 max-w-5xl">
+      <div className="px-4 md:px-12 py-6 md:py-8 max-w-5xl">
         {assistirFilme ? (
           <div className="rounded-xl border border-white/10 bg-[#1A1A1A]/80 p-8 text-center">
             <h2 className="text-xl font-bold text-white mb-2">{series.title}</h2>
@@ -188,13 +188,13 @@ export default function SeriesDetail() {
         ) : (
           <>
         {/* Header: Episódios + Season dropdown */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
           <h2 className="text-xl md:text-2xl font-bold text-white">Episódios</h2>
           {seasons.length > 1 && (
             <select
               value={selectedSeason}
               onChange={e => setSelectedSeason(Number(e.target.value))}
-              className="bg-[#2A2A2A] border border-white/20 text-white px-4 py-2 rounded text-sm font-medium appearance-none"
+              className="w-full sm:w-auto bg-[#2A2A2A] border border-white/20 text-white px-4 py-2 rounded text-sm font-medium appearance-none"
               style={{ colorScheme: 'dark' }}
             >
               {seasons.map(s => (
@@ -221,12 +221,12 @@ export default function SeriesDetail() {
             const rowContent = (
               <>
                 {/* Episode number */}
-                <div className={`shrink-0 w-8 text-center text-xl font-light transition-colors ${isLocked ? 'text-gray-600' : 'text-gray-500 group-hover:text-white'}`}>
+                <div className={`shrink-0 w-6 sm:w-8 text-center text-lg sm:text-xl font-light transition-colors ${isLocked ? 'text-gray-600' : 'text-gray-500 group-hover:text-white'}`}>
                   {isLocked ? <Lock className="w-4 h-4 mx-auto text-gray-600" /> : (ep.number || i + 1)}
                 </div>
 
                 {/* Thumbnail */}
-                <div className="shrink-0 w-28 md:w-36 relative">
+                <div className="shrink-0 w-24 sm:w-28 md:w-36 relative">
                   <div className="aspect-video rounded overflow-hidden bg-[#2A2A2A]">
                     {ep.thumbnail_url || series.cover_url ? (
                       <img src={ep.thumbnail_url || series.cover_url} alt="" className={`w-full h-full object-cover transition-transform duration-300 ${!isLocked ? 'group-hover:scale-105' : 'opacity-40'}`} />
@@ -293,7 +293,7 @@ export default function SeriesDetail() {
             return isLocked ? (
               <div
                 key={ep.id}
-                className="flex items-center gap-4 px-2 py-4 rounded border-b border-white/5 last:border-b-0 opacity-80 cursor-not-allowed group"
+                className="flex items-start sm:items-center gap-3 sm:gap-4 px-2 py-4 rounded border-b border-white/5 last:border-b-0 opacity-80 cursor-not-allowed group"
               >
                 {rowContent}
               </div>
@@ -301,7 +301,7 @@ export default function SeriesDetail() {
               <Link
                 key={ep.id}
                 to={`/Player?episodeId=${ep.id}`}
-                className="flex items-center gap-4 px-2 py-4 rounded hover:bg-[#2A2A2A] transition-colors group border-b border-white/5 last:border-b-0"
+                className="flex items-start sm:items-center gap-3 sm:gap-4 px-2 py-4 rounded hover:bg-[#2A2A2A] transition-colors group border-b border-white/5 last:border-b-0"
               >
                 {rowContent}
               </Link>

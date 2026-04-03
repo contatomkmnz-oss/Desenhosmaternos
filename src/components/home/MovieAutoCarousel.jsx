@@ -52,7 +52,23 @@ export default function MovieAutoCarousel({
   return (
     <div className={`relative mb-8 md:mb-12 ${className}`.trim()}>
       {header}
-      <div className="min-w-0 px-4 md:px-12 pb-4">
+      <div className="min-w-0 px-4 md:px-12 pb-4 md:hidden">
+        <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+          {movies.map((s) => (
+            <div key={s.id} className="shrink-0">
+              <SeriesCard
+                series={s}
+                isInList={myListIds?.includes(s.id)}
+                onToggleList={onToggleList}
+                episodes={episodes}
+                hideComingSoon={hideComingSoon || hideComingSoonIds.has(s.id)}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="hidden md:block min-w-0 px-4 md:px-12 pb-4">
         <div
           className="movie-marquee-wrap"
           role="region"

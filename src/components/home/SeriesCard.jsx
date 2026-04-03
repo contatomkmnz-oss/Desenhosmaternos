@@ -17,10 +17,27 @@ export default function SeriesCard({
 }) {
   const [hovered, setHovered] = useState(false);
   const [coverFailed, setCoverFailed] = useState(false);
+  const [canHover, setCanHover] = useState(false);
 
   useEffect(() => {
     setCoverFailed(false);
   }, [series.id, series.cover_url]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return undefined;
+    }
+
+    const media = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const sync = () => {
+      setCanHover(media.matches);
+      if (!media.matches) setHovered(false);
+    };
+
+    sync();
+    media.addEventListener?.('change', sync);
+    return () => media.removeEventListener?.('change', sync);
+  }, []);
 
   const seriesEpisodes = episodes.filter(e => e.series_id === series.id);
   const hasNoEpisodes = seriesEpisodes.length === 0;
@@ -37,18 +54,18 @@ export default function SeriesCard({
     : `/SeriesDetail?id=${series.id}`;
 
   const shellClass =
-    'relative shrink-0 w-[140px] md:w-[200px] lg:w-[240px] group cursor-pointer';
+    'relative shrink-0 w-[116px] sm:w-[140px] md:w-[200px] lg:w-[240px] group cursor-pointer';
 
   const Shell = inMarquee ? 'div' : motion.div;
   const shellProps = inMarquee
     ? {
         className: shellClass,
-        onMouseEnter: () => setHovered(true),
+        onMouseEnter: () => canHover && setHovered(true),
         onMouseLeave: () => setHovered(false),
       }
     : {
         className: shellClass,
-        onMouseEnter: () => setHovered(true),
+        onMouseEnter: () => canHover && setHovered(true),
         onMouseLeave: () => setHovered(false),
         whileHover: { scale: 1.05, zIndex: 10 },
         transition: { duration: 0.2 },
@@ -88,7 +105,7 @@ export default function SeriesCard({
         </div>
       </Link>
 
-      {hovered && (() => {
+      {canHover && hovered && (() => {
         const hoverPanelBody = (
           <div className="bg-[#1A1A1A] rounded-b-lg p-3 shadow-2xl border-t border-[#E50914]/30">
             <p className="text-xs font-semibold text-white truncate mb-2">{series.title}</p>
