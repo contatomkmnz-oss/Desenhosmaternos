@@ -6,12 +6,24 @@ import {
   authLoginGoogle,
   authLogout,
   authSignUpEmail,
+  getFirebaseCurrentUser,
   subscribeFirebaseAuthState,
 } from '@/lib/firebaseAuth';
 import { firebaseEnabled } from '@/lib/firebase';
 import { isAdmin as isAdminUser, withAdminRole } from '@/lib/authz';
 
 const AuthContext = createContext();
+
+function serializeProviderData(providerData = []) {
+  return providerData.map((provider) => ({
+    providerId: provider?.providerId || null,
+    uid: provider?.uid || null,
+    email: provider?.email || null,
+    displayName: provider?.displayName || null,
+    phoneNumber: provider?.phoneNumber || null,
+    photoURL: provider?.photoURL || null,
+  }));
+}
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -21,6 +33,42 @@ export const AuthProvider = ({ children }) => {
   const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(true);
   const [authError, setAuthError] = useState(null);
   const [appPublicSettings, setAppPublicSettings] = useState({ id: 'local', public_settings: {} });
+
+  const resolveSessionUser = async (firebaseUser, appUser) => {
+    if (!firebaseUser && !appUser) return null;
+
+    let claims = appUser?.claims || appUser?.customClaims || null;
+
+    if (!claims && firebaseUser?.getIdTokenResult) {
+      try {
+        const tokenResult = await firebaseUser.getIdTokenResult();
+        claims = tokenResult?.claims || null;
+      } catch (e) {
+        if (import.meta.env.DEV) {
+          console.warn('[KIDSPlay] getIdTokenResult', e);
+        }
+      }
+    }
+
+    return withAdminRole({
+      ...(appUser || {}),
+      uid: firebaseUser?.uid || appUser?.uid,
+      email: firebaseUser?.email || appUser?.email,
+      name: appUser?.name || firebaseUser?.displayName || '',
+      full_name: appUser?.full_name || firebaseUser?.displayName || '',
+      avatar_url: appUser?.avatar_url || firebaseUser?.photoURL || '',
+      photoURL: firebaseUser?.photoURL || appUser?.photoURL || '',
+      providerData: firebaseUser?.providerData
+        ? serializeProviderData(firebaseUser.providerData)
+        : (appUser?.providerData || []),
+      claims,
+      customClaims: claims,
+      auth_provider:
+        firebaseUser?.providerData?.[0]?.providerId ||
+        appUser?.auth_provider ||
+        'password',
+    });
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -41,9 +89,10 @@ export const AuthProvider = ({ children }) => {
         }
 
         const appUser = await base44.auth.me();
+        const sessionUser = await resolveSessionUser(firebaseUser, appUser);
         if (!cancelled) {
-          setCurrentUser(firebaseUser ?? appUser);
-          setUser(withAdminRole(appUser));
+          setCurrentUser(sessionUser);
+          setUser(sessionUser);
           setIsAuthenticated(Boolean(firebaseUser) || base44.auth.isLoggedIn());
           setAppPublicSettings({ id: 'local', public_settings: {} });
         }
@@ -52,8 +101,9 @@ export const AuthProvider = ({ children }) => {
           console.warn('[KIDSPlay] auth.me', e);
         }
         if (!cancelled) {
-          setCurrentUser(firebaseUser ?? null);
-          setUser(null);
+          const fallbackUser = await resolveSessionUser(firebaseUser, null);
+          setCurrentUser(fallbackUser);
+          setUser(fallbackUser);
           setIsAuthenticated(Boolean(firebaseUser));
         }
       } finally {
@@ -77,28 +127,31 @@ export const AuthProvider = ({ children }) => {
   const signInWithGoogle = async () => {
     const firebaseUser = await authLoginGoogle();
     const appUser = await base44.auth.me();
-    setCurrentUser(firebaseUser ?? appUser);
-    setUser(withAdminRole(appUser));
+    const sessionUser = await resolveSessionUser(firebaseUser, appUser);
+    setCurrentUser(sessionUser);
+    setUser(sessionUser);
     setIsAuthenticated(true);
-    return firebaseUser ?? appUser;
+    return sessionUser;
   };
 
   const signInWithEmail = async (email, password) => {
     const firebaseUser = await authLoginEmail(email, password);
     const appUser = await base44.auth.me();
-    setCurrentUser(firebaseUser ?? appUser);
-    setUser(withAdminRole(appUser));
+    const sessionUser = await resolveSessionUser(firebaseUser, appUser);
+    setCurrentUser(sessionUser);
+    setUser(sessionUser);
     setIsAuthenticated(true);
-    return firebaseUser ?? appUser;
+    return sessionUser;
   };
 
   const signUpWithEmail = async (email, password) => {
     const firebaseUser = await authSignUpEmail(email, password);
     const appUser = await base44.auth.me();
-    setCurrentUser(firebaseUser ?? appUser);
-    setUser(withAdminRole(appUser));
+    const sessionUser = await resolveSessionUser(firebaseUser, appUser);
+    setCurrentUser(sessionUser);
+    setUser(sessionUser);
     setIsAuthenticated(true);
-    return firebaseUser ?? appUser;
+    return sessionUser;
   };
 
   const logout = async (shouldRedirect = true) => {
@@ -119,8 +172,9 @@ export const AuthProvider = ({ children }) => {
     /* compat: recarrega usuário do app local */
     try {
       const u = await base44.auth.me();
-      setUser(withAdminRole(u));
-      setCurrentUser((prev) => prev ?? u);
+      const sessionUser = await resolveSessionUser(getFirebaseCurrentUser(), u);
+      setUser(sessionUser);
+      setCurrentUser((prev) => prev ?? sessionUser);
       setIsAuthenticated(base44.auth.isLoggedIn());
       setAuthError(null);
     } catch (e) {

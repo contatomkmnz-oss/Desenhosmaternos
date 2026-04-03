@@ -7,6 +7,7 @@ import { brand } from '@/data/siteContent';
 import { readActiveProfile } from '@/lib/activeProfile';
 import ProfileAvatarImage from '@/components/profile/ProfileAvatarImage';
 import { useAuth } from '@/lib/AuthContext';
+import { enableAdminPanel } from '@/config/appConfig';
 
 export default function Navbar({ isStackRoute = false }) {
   const [scrolled, setScrolled] = useState(false);
@@ -108,7 +109,7 @@ export default function Navbar({ isStackRoute = false }) {
             >
               Assinar
             </Link>
-            {isAdmin && (
+            {enableAdminPanel && isAdmin && (
               <>
                 <NotificationCenter />
                 <Link to="/Admin" className="hidden md:block text-xs text-gray-400 hover:text-[#FFC107] transition-colors font-medium">

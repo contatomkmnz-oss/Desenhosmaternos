@@ -15,15 +15,15 @@ export default defineConfig({
     },
   },
   plugins: [react(), catalogFilePersistPlugin()],
-  /** Mesma origem para dev e preview: http://localhost:4173 (localStorage partilhado entre os dois comandos). */
+  /** Mesma origem para dev e preview: http://localhost:4178 (localStorage partilhado entre os dois comandos). */
   server: {
     host: 'localhost',
-    port: 4173,
+    port: 4178,
     strictPort: true,
   },
   preview: {
     host: 'localhost',
-    port: 4173,
+    port: 4178,
     strictPort: true,
   },
 });

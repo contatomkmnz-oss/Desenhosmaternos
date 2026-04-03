@@ -30,6 +30,7 @@ import AdminBanner from './pages/admin/AdminBanner';
 import AdminPersistence from './pages/admin/AdminPersistence';
 import Subscription from './pages/Subscription';
 import AppLayout from './components/layout/AppLayout';
+import { enableAdminPanel } from '@/config/appConfig';
 
 /** Protege rotas que exigem login; redireciona para /Login se não autenticado. */
 const RequireAuth = ({ children }) => {
@@ -42,6 +43,7 @@ const RequireAuth = ({ children }) => {
 const RequireAdmin = ({ children }) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
   if (loading) return null;
+  if (!enableAdminPanel) return <Navigate to="/Home" replace />;
   if (!isAuthenticated) return <Navigate to="/Login" replace />;
   if (!isAdmin) return <Navigate to="/Home" replace />;
   return children;
