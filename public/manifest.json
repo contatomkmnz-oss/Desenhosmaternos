@@ -1,0 +1,9 @@
+{
+  "name": "KIDSPlay",
+  "short_name": "KIDSPlay",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F0F0F",
+  "theme_color": "#0F0F0F",
+  "icons": []
+}

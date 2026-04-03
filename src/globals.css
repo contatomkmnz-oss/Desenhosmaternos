@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0F0F0F;
+  color: #FFFFFF;
+}
+
+/* Safe area aplicada no root do app, não no body — evita conflito com layout */
+#root {
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  /* padding-bottom via BottomNav */
+}
+
+/* Evita seleção de texto indesejada em elementos de UI */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Overscroll nativo — impede bounce no iOS fora do app */
+html {
+  overscroll-behavior: none;
+}
+
+/* Scroll suave nativo em iOS */
+.overflow-y-auto, .overflow-auto, main {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0F0F0F;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Hide scrollbar for carousels */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Faixas de filmes: loop contínuo (conteúdo duplicado no JSX). Direção oposta com .movie-marquee-track--reverse */
+@keyframes movie-marquee-shift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.movie-marquee-wrap {
+  overflow: hidden;
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  touch-action: pan-y;
+}
+
+.movie-marquee-track {
+  display: flex;
+  width: max-content;
+  animation-name: movie-marquee-shift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Reduz artefactos/flicker de capas dentro da faixa animada (GPU + transform aninhado). */
+.movie-marquee-track img {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.movie-marquee-track.movie-marquee-track--reverse {
+  animation-direction: reverse;
+}
+
+.movie-marquee-wrap:hover .movie-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .movie-marquee-track {
+    animation-duration: 180s !important;
+  }
+}
