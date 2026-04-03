@@ -20,3 +20,4 @@ export const adminEmail = adminEmails[0] || '';
 
 export const isProductionApp = import.meta.env.PROD;
 export const enableAdminPanel = adminEmails.length > 0;
+export const enableSubscriptionFlow = false;

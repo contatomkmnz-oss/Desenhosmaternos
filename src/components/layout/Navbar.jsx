@@ -7,7 +7,7 @@ import { brand } from '@/data/siteContent';
 import { readActiveProfile } from '@/lib/activeProfile';
 import ProfileAvatarImage from '@/components/profile/ProfileAvatarImage';
 import { useAuth } from '@/lib/AuthContext';
-import { enableAdminPanel } from '@/config/appConfig';
+import { enableAdminPanel, enableSubscriptionFlow } from '@/config/appConfig';
 
 export default function Navbar({ isStackRoute = false }) {
   const [scrolled, setScrolled] = useState(false);
@@ -41,7 +41,7 @@ export default function Navbar({ isStackRoute = false }) {
     { label: 'Séries', to: '/Browse?type=series' },
     { label: 'Filmes', to: '/Browse?type=movie' },
     { label: 'Minha Lista', to: '/MyList' },
-    { label: 'Assinar', to: '/Subscription' },
+    ...(enableSubscriptionFlow ? [{ label: 'Assinar', to: '/Subscription' }] : []),
   ];
 
   const activeProfile = readActiveProfile();
@@ -87,7 +87,7 @@ export default function Navbar({ isStackRoute = false }) {
               <img src={brand.logoUrl} alt={brand.name} className="h-10 md:h-12 w-auto object-contain" />
             </Link>
             <div className="hidden md:flex items-center gap-6">
-              {links.slice(0, -1).map((l) => (
+              {links.map((l) => (
                 <Link
                   key={l.to}
                   to={l.to}
@@ -103,12 +103,14 @@ export default function Navbar({ isStackRoute = false }) {
             <Link to="/Search" className="p-2 hover:text-[#E50914] transition-colors">
               <Search className="w-5 h-5" />
             </Link>
-            <Link
-              to="/Subscription"
-              className={`hidden md:block text-sm font-semibold px-4 py-1.5 rounded-full border transition-all ${location.pathname === '/Subscription' ? 'bg-[#E50914] border-[#E50914] text-white' : 'border-[#E50914] text-[#E50914] hover:bg-[#E50914] hover:text-white'}`}
-            >
-              Assinar
-            </Link>
+            {enableSubscriptionFlow && (
+              <Link
+                to="/Subscription"
+                className={`hidden md:block text-sm font-semibold px-4 py-1.5 rounded-full border transition-all ${location.pathname === '/Subscription' ? 'bg-[#E50914] border-[#E50914] text-white' : 'border-[#E50914] text-[#E50914] hover:bg-[#E50914] hover:text-white'}`}
+              >
+                Assinar
+              </Link>
+            )}
             {enableAdminPanel && isAdmin && (
               <>
                 <NotificationCenter />

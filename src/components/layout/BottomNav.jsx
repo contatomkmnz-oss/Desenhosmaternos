@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Home, Grid2x2, Bookmark, CreditCard, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { enableSubscriptionFlow } from '@/config/appConfig';
 
 const tabs = [
   { to: '/Home', icon: Home, label: 'Início' },
   { to: '/Browse', icon: Grid2x2, label: 'Catálogo' },
   { to: '/Search', icon: Search, label: 'Buscar' },
   { to: '/MyList', icon: Bookmark, label: 'Minha Lista' },
-  { to: '/Subscription', icon: CreditCard, label: 'Assinar' },
+  ...(enableSubscriptionFlow ? [{ to: '/Subscription', icon: CreditCard, label: 'Assinar' }] : []),
 ];
 
 export default function BottomNav() {

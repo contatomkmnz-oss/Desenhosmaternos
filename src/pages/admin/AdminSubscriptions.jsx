@@ -239,6 +239,9 @@ export default function AdminSubscriptions({ embedded = false }) {
             </Button>
           </div>
         </div>
+        <div className="mb-6 rounded-xl border border-[#FFC107]/20 bg-[#FFC107]/5 px-4 py-3 text-sm text-[#FFE082]">
+          O acesso ao app esta liberado globalmente por enquanto. Use esta tela apenas para registrar ou ajustar assinaturas de clientes especificos quando precisar.
+        </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">

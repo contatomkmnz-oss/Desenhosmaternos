@@ -8,6 +8,7 @@ import SubscriptionWall from '@/components/subscription/SubscriptionWall';
 import { base44 } from '@/api/base44Client';
 import { readActiveProfile } from '@/lib/activeProfile';
 import { useQueryClient } from '@tanstack/react-query';
+import { enableSubscriptionFlow } from '@/config/appConfig';
 
 // Abas que preservam scroll ao voltar
 const TAB_ROUTES = ['/Home', '/Browse', '/Search', '/MyList', '/Subscription'];
@@ -99,7 +100,7 @@ export default function AppLayout() {
   const { isActive, subscription, isTrial } = subState;
 
   // Mostrar wall apenas se: não for rota livre, não for admin, e não tiver assinatura ativa
-  const showWall = !isFreeRoute && !isAdmin && !isActive;
+  const showWall = enableSubscriptionFlow && !isFreeRoute && !isAdmin && !isActive;
 
   return (
     <div className="min-h-screen bg-[#0F0F0F] text-white">
@@ -108,7 +109,9 @@ export default function AppLayout() {
         <SubscriptionWall isTrial={isTrial} />
       ) : (
         <PullToRefresh onRefresh={handleRefresh}>
-          <SubscriptionBanner subscription={subscription} isActive={isActive} isTrial={isTrial} />
+          {enableSubscriptionFlow && (
+            <SubscriptionBanner subscription={subscription} isActive={isActive} isTrial={isTrial} />
+          )}
           <main className={isStackRoute ? 'pb-0' : 'pb-16 md:pb-0'}>
             {outlet}
           </main>
