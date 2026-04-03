@@ -14,6 +14,7 @@ import { firebaseEnabled, firebaseAuth } from '@/lib/firebase';
 import { authLogout } from '@/lib/firebaseAuth';
 import { useFirestoreData } from '@/config/appConfig';
 import { withAdminRole } from '@/lib/authz';
+import { resolveCatalogCoverUrl } from '@/lib/catalogArtwork';
 
 /**
  * Persistência: localStorage (cache) + em dev ficheiro `data/catalog-backup.json` via catalogPersistence.
@@ -559,6 +560,29 @@ function migrateImgbbPageGalleryUrls() {
   }
 }
 
+function migrateCatalogCoverUrls() {
+  if (typeof window === 'undefined') return;
+  try {
+    const key = mockTableKey('Series');
+    const raw = localStorage.getItem(key);
+    if (!raw) return;
+    const rows = JSON.parse(raw);
+    let changed = false;
+    const out = rows.map((row) => {
+      const nextCoverUrl = resolveCatalogCoverUrl(row.cover_url, row.title);
+      if (nextCoverUrl === row.cover_url) return row;
+      changed = true;
+      return { ...row, cover_url: nextCoverUrl };
+    });
+    if (changed) {
+      localStorage.setItem(key, JSON.stringify(out));
+      scheduleCatalogSync();
+    }
+  } catch (e) {
+    console.warn('[demo] migrateCatalogCoverUrls', e);
+  }
+}
+
 /**
  * Garante URLs de banner/capa nas séries demo quando faltam.
  * FeaturedBanner não é mais preenchido pelo seed (hero = `heroBanners.js`).
@@ -617,6 +641,7 @@ if (!useFirestoreData) {
   migrateRemoveProfileArroto();
   migrateSeriesLegacyBannerFiles();
   migrateImgbbPageGalleryUrls();
+  migrateCatalogCoverUrls();
   ensureDemoHeroBanners();
 }
 
@@ -681,7 +706,8 @@ function ensureSeedSeriesRowsAndHighlights() {
           ex.description !== s.description ||
           ex.age_rating !== s.age_rating ||
           seedCategoriesJson !== exCategoriesJson ||
-          (s.category ?? '') !== (ex.category ?? '');
+          (s.category ?? '') !== (ex.category ?? '') ||
+          ex.content_type !== s.content_type;
         if (needsSeedTextSync) {
           changed = true;
           return {
@@ -689,8 +715,10 @@ function ensureSeedSeriesRowsAndHighlights() {
             title: s.title,
             description: s.description,
             age_rating: s.age_rating,
+            content_type: s.content_type,
             categories: s.categories ? [...s.categories] : ex.categories,
             category: s.category ?? ex.category,
+            movie_url: s.content_type === 'series' ? '' : (ex.movie_url ?? s.movie_url),
           };
         }
         const hl = ex.highlighted_home_section;
@@ -715,6 +743,65 @@ function ensureSeedSeriesRowsAndHighlights() {
 
 if (!useFirestoreData) {
   ensureSeedSeriesRowsAndHighlights();
+}
+
+function ensureSeedEpisodeRows() {
+  if (typeof window === 'undefined') return;
+  try {
+    const seed = buildMockSeed().Episode;
+    const key = mockTableKey('Episode');
+    const raw = safeGetItem(key);
+    if (!raw) return;
+    const rows = JSON.parse(raw);
+    const byId = Object.fromEntries(rows.map((row) => [row.id, row]));
+    let changed = false;
+
+    const merged = seed.map((seedRow) => {
+      const existing = byId[seedRow.id];
+      if (!existing) {
+        changed = true;
+        return { ...seedRow };
+      }
+
+      const needsSeedSync =
+        existing.title !== seedRow.title ||
+        existing.description !== seedRow.description ||
+        existing.video_url !== seedRow.video_url ||
+        existing.thumbnail_url !== seedRow.thumbnail_url ||
+        (existing.season || 1) !== (seedRow.season || 1) ||
+        (existing.number || 0) !== (seedRow.number || 0);
+
+      if (!needsSeedSync) return existing;
+
+      changed = true;
+      return {
+        ...existing,
+        title: seedRow.title,
+        description: seedRow.description,
+        video_url: seedRow.video_url,
+        videoUrl: seedRow.video_url,
+        videoProvider: seedRow.videoProvider ?? existing.videoProvider,
+        videoType: seedRow.videoType ?? existing.videoType,
+        thumbnail_url: seedRow.thumbnail_url,
+        season: seedRow.season,
+        number: seedRow.number,
+      };
+    });
+
+    const seedIds = new Set(seed.map((row) => row.id));
+    rows.forEach((row) => {
+      if (seedIds.has(row.id)) return;
+      merged.push(row);
+    });
+
+    if (changed) safeSetItem(key, JSON.stringify(merged));
+  } catch (e) {
+    console.warn('[demo] ensureSeedEpisodeRows', e);
+  }
+}
+
+if (!useFirestoreData) {
+  ensureSeedEpisodeRows();
 }
 
 /** Corrige nomes antigos (Goku, Avatar N…) e SVG data-URL quebrados; não substitui Imgur válido. */

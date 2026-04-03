@@ -18,7 +18,6 @@ export default function Player() {
   const activeProfile = readActiveProfile();
   const progressInterval = useRef(null);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [autoplayCountdown, setAutoplayCountdown] = useState(null);
 
   const { data: episodeRows = [], isLoading: episodeLoading } = useLiveEntityList({
     entity: base44.entities.Episode,
@@ -89,6 +88,12 @@ export default function Player() {
   }, [isMoviePlayback, series, episode]);
   const mediaKey = isMoviePlayback ? `movie-${seriesIdParam}` : episodeId;
 
+  const goToNextEpisode = () => {
+    if (nextEpisode) {
+      navigate(`/Player?episodeId=${nextEpisode.id}`);
+    }
+  };
+
   // Autoplay on episode end (só fluxo por episódio)
   useEffect(() => {
     if (isMoviePlayback || !nextEpisode) return;
@@ -97,20 +102,7 @@ export default function Player() {
     if (!iframe) return;
 
     const handleVideoEnd = () => {
-      let countdown = 3;
-      setAutoplayCountdown(countdown);
-
-      const countdownInterval = setInterval(() => {
-        countdown--;
-        setAutoplayCountdown(countdown);
-
-        if (countdown === 0) {
-          clearInterval(countdownInterval);
-          navigate(`/Player?episodeId=${nextEpisode.id}`);
-        }
-      }, 1000);
-
-      return () => clearInterval(countdownInterval);
+      navigate(`/Player?episodeId=${nextEpisode.id}`);
     };
 
     const handleMessage = (event) => {
@@ -123,12 +115,6 @@ export default function Player() {
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, [isMoviePlayback, nextEpisode, episodeId, navigate]);
-
-  const goToNextEpisode = () => {
-    if (nextEpisode) {
-      navigate(`/Player?episodeId=${nextEpisode.id}`);
-    }
-  };
 
   const waiting =
     (!!episodeId && episodeLoading) ||
@@ -234,16 +220,7 @@ export default function Player() {
               autoplay
               onEnded={() => {
                 if (isMoviePlayback || !nextEpisode) return;
-                let countdown = 3;
-                setAutoplayCountdown(countdown);
-                const countdownInterval = setInterval(() => {
-                  countdown--;
-                  setAutoplayCountdown(countdown);
-                  if (countdown === 0) {
-                    clearInterval(countdownInterval);
-                    navigate(`/Player?episodeId=${nextEpisode.id}`);
-                  }
-                }, 1000);
+                goToNextEpisode();
               }}
             />
           ) : (
@@ -258,23 +235,6 @@ export default function Player() {
             </div>
           )}
 
-          {/* Autoplay Countdown */}
-          {!isMoviePlayback && autoplayCountdown !== null && nextEpisode && (
-            <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-40 backdrop-blur-sm">
-              <div className="text-center">
-                <p className="text-gray-300 mb-4">Próximo episódio em</p>
-                <div className="text-6xl font-bold text-[#E50914] mb-6">{autoplayCountdown}</div>
-                <p className="text-white mb-2">T{nextEpisode.season || 1} E{nextEpisode.number}: {nextEpisode.title}</p>
-                <button
-                  onClick={() => setAutoplayCountdown(null)}
-                  className="inline-flex items-center gap-2 mt-6 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-md text-sm transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 

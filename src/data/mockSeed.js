@@ -3,6 +3,7 @@
  * Filmes: catálogo central `movieCatalog.js` com `categories[]`.
  */
 import { profileAvatarsSeed } from '@/data/profileAvatars';
+import { barneyEpisodes } from '@/data/barneyEpisodes';
 import { buildSeriesRowsFromMovieCatalog } from '@/data/movieCatalog';
 import { DEMO_VIDEO_MP4 } from '@/constants/demoVideo';
 
@@ -94,6 +95,7 @@ export function buildMockSeed() {
         video_url: DEMO_VIDEO_MP4,
         duration: 596,
       },
+      ...barneyEpisodes,
     ],
     FeaturedBanner: [
       { id: 'fb-1', series_id: 'movie-o-exorcista-1974', order: 0, active: true },

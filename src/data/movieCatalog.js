@@ -5,6 +5,7 @@
 import { DEMO_VIDEO_MP4 } from '@/constants/demoVideo';
 import { L } from '@/data/netflixRowOrder';
 import { NETFLIX_CATALOG_EXTRAS } from '@/data/netflixCatalogExtras';
+import { resolveCatalogCoverUrl } from '@/lib/catalogArtwork';
 
 const POSTERS = [
   '/images/banners/poster-movie.svg',
@@ -201,11 +202,11 @@ export const MOVIE_CATALOG = [
   },
   {
     id: 'movie-a-casa-de-cera-2005',
-    kind: 'movie',
+    kind: 'series',
     title: 'Barney e Seus Amigos',
     year: 2005,
     description:
-      'Um dinossauro ensina valores como amizade, respeito e cooperação.',
+      'Um dinossauro querido ensina valores como amizade, respeito e cooperação em aventuras musicais para crianças.',
     categories: [L.familia, L.pequenos],
     total_views: 8600,
     age_rating: 'Livre',
@@ -441,7 +442,7 @@ export function buildSeriesRowsFromMovieCatalog() {
       featured: true,
       published: true,
       total_views: entry.total_views ?? 5000,
-      cover_url: entry.cover_url ?? poster(i),
+      cover_url: resolveCatalogCoverUrl(entry.cover_url ?? poster(i), entry.title),
       banner_url: entry.banner_url ?? poster(i + 1),
       banner_object_position: '50% center',
       highlighted_home_section: '',
