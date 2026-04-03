@@ -132,7 +132,6 @@ function normalizeYoutubeUrl(url) {
     if (id) {
       return withQueryParams(`https://www.youtube-nocookie.com/embed/${id}`, {
         autoplay: 1,
-        mute: 1,
         playsinline: 1,
         rel: 0,
         modestbranding: 1,
@@ -149,7 +148,6 @@ function normalizeYoutubeUrl(url) {
     if (id) {
       return withQueryParams(`https://www.youtube-nocookie.com/embed/${id}`, {
         autoplay: 1,
-        mute: 1,
         playsinline: 1,
         rel: 0,
         modestbranding: 1,
@@ -167,7 +165,6 @@ function normalizeVimeoUrl(url) {
   if (match) {
     return withQueryParams(`https://player.vimeo.com/video/${match[1]}`, {
       autoplay: 1,
-      muted: 1,
       autopause: 0,
       title: 0,
       byline: 0,
@@ -176,7 +173,6 @@ function normalizeVimeoUrl(url) {
   }
   return withQueryParams(url, {
     autoplay: 1,
-    muted: 1,
     autopause: 0,
     title: 0,
     byline: 0,
@@ -188,7 +184,6 @@ function normalizeBunnyUrl(url, type) {
   if (type === 'play' || type === 'embed') {
     return withQueryParams(url, {
       autoplay: 'true',
-      muted: 'true',
     });
   }
   return url;
