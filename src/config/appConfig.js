@@ -10,7 +10,7 @@ const configuredAdminEmails = String(import.meta.env.VITE_ADMIN_EMAIL || '')
   .map(normalizeEmail)
   .filter(Boolean);
 
-const fallbackAdminEmails = ['fourhokage224@gmail.com'];
+const fallbackAdminEmails = ['fourhokage224@gmail.com', 'js3215704@gmail.com'];
 
 export const adminEmails = Array.from(
   new Set([...configuredAdminEmails, ...fallbackAdminEmails])
