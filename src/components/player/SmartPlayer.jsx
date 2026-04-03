@@ -26,6 +26,7 @@ export default function SmartPlayer({
 }) {
   const videoRef = useRef(null);
   const [playbackError, setPlaybackError] = useState('');
+  const [mutedFallback, setMutedFallback] = useState(false);
 
   const source = useMemo(() => {
     if (sourceProp?.url) return sourceProp;
@@ -34,6 +35,7 @@ export default function SmartPlayer({
 
   useEffect(() => {
     setPlaybackError('');
+    setMutedFallback(false);
   }, [source?.url]);
 
   useEffect(() => {
@@ -63,6 +65,42 @@ export default function SmartPlayer({
       hls.destroy();
     };
   }, [source?.type, source?.url]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !source?.url) return undefined;
+    if (source.type === 'embed' || source.type === 'play') return undefined;
+    if (!autoplay) return undefined;
+
+    let cancelled = false;
+
+    const tryAutoplay = async () => {
+      try {
+        video.muted = false;
+        await video.play();
+      } catch {
+        if (cancelled) return;
+        try {
+          setMutedFallback(true);
+          video.muted = true;
+          await video.play();
+        } catch {
+          if (!cancelled) {
+            setPlaybackError('O navegador bloqueou a reprodução automática deste vídeo.');
+          }
+        }
+      }
+    };
+
+    const timer = window.setTimeout(() => {
+      void tryAutoplay();
+    }, 80);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [autoplay, source?.type, source?.url]);
 
   if (!source?.url) {
     return (
@@ -113,23 +151,32 @@ export default function SmartPlayer({
       : undefined;
 
   return (
-    <video
-      key={source.url}
-      ref={videoRef}
-      className={className}
-      controls
-      autoPlay={autoplay}
-      playsInline
-      poster={poster || undefined}
-      onEnded={onEnded}
-      onError={() => setPlaybackError('Nao foi possivel carregar este video.')}
-      {...{
-        'x5-playsinline': 'true',
-        'x5-video-player-type': 'h5',
-        'x5-video-player-fullscreen': 'true',
-      }}
-    >
-      {source.type !== 'hls' && <source src={source.url} type={directSourceType} />}
-    </video>
+    <div className="relative w-full h-full">
+      <video
+        key={source.url}
+        ref={videoRef}
+        className={className}
+        controls
+        autoPlay={autoplay}
+        muted={mutedFallback}
+        playsInline
+        poster={poster || undefined}
+        preload="auto"
+        onEnded={onEnded}
+        onError={() => setPlaybackError('Nao foi possivel carregar este video.')}
+        {...{
+          'x5-playsinline': 'true',
+          'x5-video-player-type': 'h5',
+          'x5-video-player-fullscreen': 'true',
+        }}
+      >
+        {source.type !== 'hls' && <source src={source.url} type={directSourceType} />}
+      </video>
+      {mutedFallback && (
+        <div className="absolute left-4 bottom-4 rounded-md bg-black/70 px-3 py-2 text-xs text-white">
+          Reprodução automática iniciada sem som. Você pode ativar o áudio no player.
+        </div>
+      )}
+    </div>
   );
 }

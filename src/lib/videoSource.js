@@ -21,6 +21,17 @@ function toUrl(value) {
   }
 }
 
+function withQueryParams(url, params) {
+  const parsed = toUrl(url);
+  if (!parsed) return url;
+
+  Object.entries(params).forEach(([key, value]) => {
+    parsed.searchParams.set(key, String(value));
+  });
+
+  return parsed.toString();
+}
+
 export function normalizeVideoUrl(value) {
   const extracted = extractIframeSrc(value);
   return safeDecodeUrl(extracted).trim();
@@ -96,14 +107,20 @@ export function detectVideoType(value) {
 function normalizeDriveUrl(url) {
   const fileMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
   if (fileMatch) {
-    return `https://drive.google.com/file/d/${fileMatch[1]}/preview`;
+      return withQueryParams(
+        `https://drive.google.com/file/d/${fileMatch[1]}/preview`,
+        { autoplay: 1 }
+      );
   }
   const parsed = toUrl(url);
   const id = parsed?.searchParams.get('id');
   if (id) {
-    return `https://drive.google.com/file/d/${id}/preview`;
+    return withQueryParams(
+      `https://drive.google.com/file/d/${id}/preview`,
+      { autoplay: 1 }
+    );
   }
-  return url;
+  return withQueryParams(url, { autoplay: 1 });
 }
 
 function normalizeYoutubeUrl(url) {
@@ -112,12 +129,34 @@ function normalizeYoutubeUrl(url) {
 
   if (parsed.hostname === 'youtu.be') {
     const id = parsed.pathname.replace(/^\/+/, '');
-    if (id) return `https://www.youtube.com/embed/${id}`;
+    if (id) {
+      return withQueryParams(`https://www.youtube-nocookie.com/embed/${id}`, {
+        autoplay: 1,
+        mute: 1,
+        playsinline: 1,
+        rel: 0,
+        modestbranding: 1,
+        controls: 1,
+        iv_load_policy: 3,
+      });
+    }
   }
 
   if (parsed.hostname.includes('youtube.com')) {
-    const id = parsed.searchParams.get('v');
-    if (id) return `https://www.youtube.com/embed/${id}`;
+    const id =
+      parsed.searchParams.get('v') ||
+      parsed.pathname.match(/\/embed\/([^/?]+)/)?.[1];
+    if (id) {
+      return withQueryParams(`https://www.youtube-nocookie.com/embed/${id}`, {
+        autoplay: 1,
+        mute: 1,
+        playsinline: 1,
+        rel: 0,
+        modestbranding: 1,
+        controls: 1,
+        iv_load_policy: 3,
+      });
+    }
   }
 
   return url;
@@ -126,7 +165,31 @@ function normalizeYoutubeUrl(url) {
 function normalizeVimeoUrl(url) {
   const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/i);
   if (match) {
-    return `https://player.vimeo.com/video/${match[1]}`;
+    return withQueryParams(`https://player.vimeo.com/video/${match[1]}`, {
+      autoplay: 1,
+      muted: 1,
+      autopause: 0,
+      title: 0,
+      byline: 0,
+      portrait: 0,
+    });
+  }
+  return withQueryParams(url, {
+    autoplay: 1,
+    muted: 1,
+    autopause: 0,
+    title: 0,
+    byline: 0,
+    portrait: 0,
+  });
+}
+
+function normalizeBunnyUrl(url, type) {
+  if (type === 'play' || type === 'embed') {
+    return withQueryParams(url, {
+      autoplay: 'true',
+      muted: 'true',
+    });
   }
   return url;
 }
@@ -158,6 +221,7 @@ export function buildVideoSource(valueOrData) {
         detectVideoType(url);
 
   let normalizedUrl = url;
+  if (provider === 'bunny') normalizedUrl = normalizeBunnyUrl(url, type);
   if (provider === 'google-drive') normalizedUrl = normalizeDriveUrl(url);
   if (provider === 'youtube') normalizedUrl = normalizeYoutubeUrl(url);
   if (provider === 'vimeo') normalizedUrl = normalizeVimeoUrl(url);
