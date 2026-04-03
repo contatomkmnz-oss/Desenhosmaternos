@@ -39,7 +39,7 @@ function ManualImageUrlInput({ value, onChange }) {
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { Plus, Pencil, Trash2, ArrowLeft, EyeOff, Star } from 'lucide-react';
+import { Plus, Pencil, Trash2, ArrowLeft, EyeOff, Star, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -66,6 +66,7 @@ export default function AdminSeries() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [listFilter, setListFilter] = useState('all'); // all | series | movie
+  const [searchTerm, setSearchTerm] = useState('');
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -248,6 +249,21 @@ export default function AdminSeries() {
     if (listFilter === 'series') return s.content_type !== CONTENT_TYPE_MOVIE;
     if (listFilter === 'movie') return s.content_type === CONTENT_TYPE_MOVIE;
     return true;
+  }).filter((s) => {
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) return true;
+
+    const searchable = [
+      s.title,
+      s.category,
+      Array.isArray(s.categories) ? s.categories.join(', ') : '',
+      s.year,
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+    return searchable.includes(query);
   });
 
   const detectedMovieSource =
@@ -288,6 +304,16 @@ export default function AdminSeries() {
               {t.label}
             </button>
           ))}
+        </div>
+
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Input
+            placeholder="Pesquisar desenhos, filmes, categorias..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 bg-[#1A1A1A] border-white/10 text-white placeholder:text-gray-500"
+          />
         </div>
 
         <div className="space-y-3">
