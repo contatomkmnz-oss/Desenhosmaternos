@@ -5,7 +5,6 @@
 import { DEMO_VIDEO_MP4 } from '@/constants/demoVideo';
 import { L } from '@/data/netflixRowOrder';
 import { NETFLIX_CATALOG_EXTRAS } from '@/data/netflixCatalogExtras';
-import { resolveCatalogCoverUrl } from '@/lib/catalogArtwork';
 
 const POSTERS = [
   '/images/banners/poster-movie.svg',
@@ -442,7 +441,8 @@ export function buildSeriesRowsFromMovieCatalog() {
       featured: true,
       published: true,
       total_views: entry.total_views ?? 5000,
-      cover_url: resolveCatalogCoverUrl(entry.cover_url ?? poster(i), entry.title),
+      cover_url: entry.cover_url ?? '',
+      imageSource: entry.cover_url ? 'restored_original' : 'missing',
       banner_url: entry.banner_url ?? poster(i + 1),
       banner_object_position: '50% center',
       highlighted_home_section: '',

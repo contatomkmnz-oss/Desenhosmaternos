@@ -3,12 +3,18 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getAdminApp } from './firebase-admin-app.mjs';
+import {
+  buildProtectedCoverUpdate,
+  writeFirestoreCatalogBackup,
+} from './lib/firestoreCoverProtection.mjs';
 import { buildMockSeed } from '@/data/mockSeed';
 import { mockTableKey } from '@/config/storageKeys';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const defaultBackupPath = path.resolve(__dirname, '../data/catalog-backup.json');
 const inputPath = path.resolve(process.cwd(), process.argv[2] || defaultBackupPath);
+const preserveExisting = true;
+const overwriteOnlyIfEmpty = true;
 
 function parseStoredJson(snapshot, key) {
   const raw = snapshot?.keys?.[key];
@@ -81,11 +87,46 @@ async function main() {
   const app = getAdminApp();
   const db = getFirestore(app);
   const batch = db.batch();
+  const backupFile = await writeFirestoreCatalogBackup(db, {
+    reason: 'seed-firestore',
+    preserveExisting,
+    overwriteOnlyIfEmpty,
+    inputPath,
+  });
+  const existingMoviesSnap = await db.collection('movies').get();
+  const existingMoviesById = Object.fromEntries(
+    existingMoviesSnap.docs.map((doc) => [doc.id, doc.data()])
+  );
 
   movies.forEach((movie) => {
     const ref = db.collection('movies').doc(movie.id);
+    const existing = existingMoviesById[movie.id] || {};
+    const nextBannerUrl =
+      preserveExisting && overwriteOnlyIfEmpty && String(existing.banner_url || '').trim()
+        ? existing.banner_url
+        : movie.banner_url || existing.banner_url || '';
+    const coverUpdate = buildProtectedCoverUpdate(existing, {
+      nextCoverUrl: movie.cover_url || '',
+      nextImageSource: movie.cover_url ? 'restored_original' : (existing.imageSource || 'missing'),
+      overwriteOnlyIfEmpty,
+      allowOverwriteExisting: false,
+    });
+    const nextCoverUrl = coverUpdate.skip
+      ? existing.cover_url || ''
+      : (coverUpdate.payload.cover_url ?? existing.cover_url ?? '');
+    const nextImageSource = coverUpdate.skip
+      ? existing.imageSource || ''
+      : (coverUpdate.payload.imageSource ?? existing.imageSource ?? '');
+
     batch.set(ref, {
       ...movie,
+      cover_url: nextCoverUrl,
+      banner_url: nextBannerUrl,
+      imageSource: nextImageSource,
+      previous_cover_url:
+        coverUpdate.payload.previous_cover_url ??
+        existing.previous_cover_url ??
+        '',
       createdAt: movie.created_date || null,
       updatedAt: movie.updated_date || null,
     }, { merge: true });
@@ -122,6 +163,7 @@ async function main() {
 
   console.log(`Seed concluído com sucesso.
 Arquivo: ${inputPath}
+Backup: ${backupFile}
 movies: ${movies.length}
 episodes: ${episodes.length}
 banners: ${banners.length}

@@ -24,7 +24,8 @@ export function buildMockSeed() {
       highlighted_home_section: 'mais_assistidos',
       total_views: 6500,
       published: true,
-      cover_url: '/images/banners/poster-comedy.svg',
+      cover_url: '',
+      imageSource: 'missing',
       content_type: 'series',
     },
     {
@@ -38,7 +39,8 @@ export function buildMockSeed() {
       highlighted_home_section: 'fantasia_e_magia',
       total_views: 4200,
       published: true,
-      cover_url: '/images/banners/hero-slide-1.svg',
+      cover_url: '',
+      imageSource: 'missing',
       content_type: 'series',
     },
   ];

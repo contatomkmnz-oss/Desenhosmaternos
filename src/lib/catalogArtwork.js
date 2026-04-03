@@ -1,12 +1,3 @@
-const DEFAULT_SEED_POSTERS = [
-  '/images/banners/poster-movie.svg',
-  '/images/banners/poster-comedy.svg',
-  '/images/banners/hero-slide-1.svg',
-  '/images/banners/hero-slide-2.svg',
-];
-
-const DEFAULT_SEED_POSTER_SET = new Set(DEFAULT_SEED_POSTERS);
-
 function hashString(value) {
   return Array.from(String(value || '')).reduce(
     (acc, char) => ((acc << 5) - acc + char.charCodeAt(0)) | 0,
@@ -84,10 +75,6 @@ export function buildCatalogPosterDataUrl(title) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-export function getCatalogFallbackPosterUrl(title) {
-  return DEFAULT_SEED_POSTERS[Math.abs(hashString(title)) % DEFAULT_SEED_POSTERS.length];
-}
-
 export function isGeneratedCatalogPosterDataUrl(url) {
   if (typeof url !== 'string' || !url.startsWith('data:image/svg+xml')) return false;
   return (
@@ -100,7 +87,6 @@ export function isGeneratedCatalogPosterDataUrl(url) {
 
 export function isLikelyBrokenCatalogCoverUrl(url) {
   if (!url) return true;
-  if (DEFAULT_SEED_POSTER_SET.has(url)) return true;
   if (isGeneratedCatalogPosterDataUrl(url)) return true;
   if (/^https?:\/\/(www\.)?ibb\.co\//i.test(url)) return true;
   if (/^https?:\/\/i\.ibb\.co\/[^/]+\/(?:image|images-\d+)\.(?:jpe?g|png|webp)$/i.test(url)) {
@@ -111,7 +97,7 @@ export function isLikelyBrokenCatalogCoverUrl(url) {
 
 export function resolveCatalogCoverUrl(url, title) {
   if (isLikelyBrokenCatalogCoverUrl(url)) {
-    return getCatalogFallbackPosterUrl(title);
+    return buildCatalogPosterDataUrl(title);
   }
   return url;
 }

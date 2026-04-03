@@ -14,7 +14,6 @@ import { firebaseEnabled, firebaseAuth } from '@/lib/firebase';
 import { authLogout } from '@/lib/firebaseAuth';
 import { useFirestoreData } from '@/config/appConfig';
 import { withAdminRole } from '@/lib/authz';
-import { resolveCatalogCoverUrl } from '@/lib/catalogArtwork';
 
 /**
  * Persistência: localStorage (cache) + em dev ficheiro `data/catalog-backup.json` via catalogPersistence.
@@ -512,7 +511,9 @@ function migrateSeriesLegacyBannerFiles() {
         typeof r.cover_url === 'string' &&
         r.cover_url.includes('unsplash.com')
       ) {
-        r.cover_url = '/images/banners/poster-comedy.svg';
+        r.previous_cover_url = r.cover_url || r.previous_cover_url || '';
+        r.cover_url = '';
+        r.imageSource = 'missing';
         changed = true;
       }
       return r;
@@ -524,7 +525,8 @@ function migrateSeriesLegacyBannerFiles() {
 }
 
 /**
- * ibb.co/… é página HTML do ImgBB, não imagem — <img> fica partido. Substitui por placeholder local.
+ * ibb.co/… é página HTML do ImgBB, não imagem. Limpa o campo para evitar
+ * persistir placeholder/fallback como se fosse capa oficial.
  */
 function migrateImgbbPageGalleryUrls() {
   if (typeof window === 'undefined') return;
@@ -542,7 +544,9 @@ function migrateImgbbPageGalleryUrls() {
     const out = rows.map((row) => {
       const r = { ...row };
       if (isImgbbGalleryPage(r.cover_url)) {
-        r.cover_url = '/images/banners/poster-movie.svg';
+        r.previous_cover_url = r.cover_url || r.previous_cover_url || '';
+        r.cover_url = '';
+        r.imageSource = 'missing';
         changed = true;
       }
       if (isImgbbGalleryPage(r.banner_url)) {
@@ -557,29 +561,6 @@ function migrateImgbbPageGalleryUrls() {
     }
   } catch (e) {
     console.warn('[demo] migrateImgbbPageGalleryUrls', e);
-  }
-}
-
-function migrateCatalogCoverUrls() {
-  if (typeof window === 'undefined') return;
-  try {
-    const key = mockTableKey('Series');
-    const raw = localStorage.getItem(key);
-    if (!raw) return;
-    const rows = JSON.parse(raw);
-    let changed = false;
-    const out = rows.map((row) => {
-      const nextCoverUrl = resolveCatalogCoverUrl(row.cover_url, row.title);
-      if (nextCoverUrl === row.cover_url) return row;
-      changed = true;
-      return { ...row, cover_url: nextCoverUrl };
-    });
-    if (changed) {
-      localStorage.setItem(key, JSON.stringify(out));
-      scheduleCatalogSync();
-    }
-  } catch (e) {
-    console.warn('[demo] migrateCatalogCoverUrls', e);
   }
 }
 
@@ -640,8 +621,6 @@ function ensureDemoHeroBanners() {
 if (!useFirestoreData) {
   migrateRemoveProfileArroto();
   migrateSeriesLegacyBannerFiles();
-  migrateImgbbPageGalleryUrls();
-  migrateCatalogCoverUrls();
   ensureDemoHeroBanners();
 }
 

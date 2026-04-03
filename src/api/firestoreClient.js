@@ -10,7 +10,6 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { db, firestoreEnabled } from '@/lib/firestore';
-import { resolveCatalogCoverUrl } from '@/lib/catalogArtwork';
 
 const COLLECTIONS = {
   Series: 'movies',
@@ -30,19 +29,10 @@ function toIso(value) {
 function normalizeRow(id, data, collectionName) {
   const createdAt = toIso(data.createdAt) || data.created_date;
   const updatedAt = toIso(data.updatedAt) || data.updated_date;
-  const isSeriesCollection = collectionName === COLLECTIONS.Series;
-  const coverUrl = isSeriesCollection
-    ? resolveCatalogCoverUrl(data.cover_url, data.title)
-    : data.cover_url;
-  const bannerUrl = isSeriesCollection
-    ? data.banner_url || coverUrl
-    : data.banner_url;
 
   return {
     ...data,
     id,
-    cover_url: coverUrl,
-    banner_url: bannerUrl,
     createdAt,
     updatedAt,
     created_date: createdAt,
