@@ -305,7 +305,7 @@ export const MOVIE_CATALOG = [
     year: 1999,
     description:
       'Um caminhão aventureiro ensina ciência e matemática em corridas.',
-    categories: [L.corridas, L.edu],
+    categories: [L.pequenos, L.edu],
     total_views: 9600,
     age_rating: 'Livre',
     cover_url: 'https://i.ibb.co/Jj5s2ggC/images-36.jpg',
@@ -317,7 +317,7 @@ export const MOVIE_CATALOG = [
     year: 2003,
     description:
       'Trens vivem histórias que ensinam trabalho em equipe e amizade.',
-    categories: [L.corridas, L.familia],
+    categories: [L.familia, L.pequenos],
     total_views: 11800,
     age_rating: 'Livre',
     cover_url: 'https://i.ibb.co/Kz2qcS5Y/Thomas-e-Seus-Amigos.webp',

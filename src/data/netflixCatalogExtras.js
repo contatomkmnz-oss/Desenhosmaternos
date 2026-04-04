@@ -700,7 +700,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     age_rating: 'Livre',
   },
 
-  // 🚗 Corridas & Máquinas
+  // Ex-«Corridas & Máquinas»: redistribuídos nas fileiras existentes
   {
     id: 'mock-netflix-cor-hot-wheels-race-off',
     kind: 'movie',
@@ -708,7 +708,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 2017,
     description:
       'Corridas radicais com veículos cheios de ação.',
-    categories: [L.corridas],
+    categories: [L.herois],
     total_views: 6400,
     age_rating: 'Livre',
   },
@@ -719,7 +719,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 2013,
     description:
       'Um caracol veloz vive aventuras em corridas emocionantes.',
-    categories: [L.corridas],
+    categories: [L.engracados],
     total_views: 7100,
     age_rating: 'Livre',
   },
@@ -730,7 +730,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 2008,
     description:
       'Carros vivem histórias divertidas no universo de Corrida.',
-    categories: [L.corridas],
+    categories: [L.engracados],
     total_views: 7600,
     age_rating: 'Livre',
   },
@@ -741,7 +741,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 2011,
     description:
       'Veículos de resgate ajudam a cidade em situações de emergência.',
-    categories: [L.corridas],
+    categories: [L.pequenos],
     total_views: 8200,
     age_rating: 'Livre',
   },
@@ -752,7 +752,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 2019,
     description:
       'Uma moto jovem vive aventuras com seus amigos.',
-    categories: [L.corridas],
+    categories: [L.pequenos],
     total_views: 5800,
     age_rating: 'Livre',
   },
@@ -763,7 +763,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 2012,
     description:
       'Caminhões gigantes vivem aventuras cheias de velocidade.',
-    categories: [L.corridas],
+    categories: [L.herois],
     total_views: 4900,
     age_rating: 'Livre',
   },
@@ -774,7 +774,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 2019,
     description:
       'Veículos vivem desafios com foco em velocidade e aprendizado.',
-    categories: [L.corridas],
+    categories: [L.edu],
     total_views: 6100,
     age_rating: 'Livre',
   },
@@ -785,7 +785,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 1967,
     description:
       'Um piloto enfrenta desafios em corridas perigosas.',
-    categories: [L.corridas],
+    categories: [L.herois],
     total_views: 5500,
     age_rating: 'Livre',
   },
@@ -796,7 +796,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 2014,
     description:
       'Jovens pilotos enfrentam desafios radicais em pistas incríveis.',
-    categories: [L.corridas],
+    categories: [L.herois],
     total_views: 5200,
     age_rating: 'Livre',
   },
@@ -807,7 +807,7 @@ export const NETFLIX_CATALOG_EXTRAS = [
     year: 2010,
     description:
       'Caminhões vivem aventuras aprendendo sobre amizade.',
-    categories: [L.corridas],
+    categories: [L.familia],
     total_views: 4700,
     age_rating: 'Livre',
   },
