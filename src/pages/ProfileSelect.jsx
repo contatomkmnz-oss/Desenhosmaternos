@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { brand } from '@/data/siteContent';
 import { LS_ACTIVE_PROFILE } from '@/config/storageKeys';
 import { scheduleCatalogSync } from '@/lib/catalogPersistence';
-import { profileAvatars, preloadProfileAvatars } from '@/data/profileAvatars';
+import { normalizeProfileAvatarUrl, profileAvatars, preloadProfileAvatars } from '@/data/profileAvatars';
 import ProfileAvatarImage from '@/components/profile/ProfileAvatarImage';
 import { useAuth } from '@/lib/AuthContext';
 
@@ -37,7 +37,7 @@ export default function ProfileSelect() {
     enabled: !!user?.email,
   });
 
-  /** Lista fixa de 6 avatares de terror (fonte: src/data/profileAvatars.js) */
+  /** Lista fixa de 6 avatares infantis (fonte: src/data/profileAvatars.js) */
   const allAvatars = profileAvatars;
 
   const createMut = useMutation({
@@ -76,16 +76,17 @@ export default function ProfileSelect() {
 
   const openEdit = (p) => {
     setEditingProfile(p);
-    setForm({ name: p.name, is_kid: p.is_kid || false, avatar_url: p.avatar_url || '' });
+    setForm({ name: p.name, is_kid: p.is_kid || false, avatar_url: normalizeProfileAvatarUrl(p.avatar_url) });
     setMode('edit');
   };
 
   const handleSave = () => {
     if (!form.name.trim()) return;
+    const payload = { ...form, avatar_url: normalizeProfileAvatarUrl(form.avatar_url), user_email: user.email };
     if (editingProfile) {
-      updateMut.mutate({ id: editingProfile.id, data: { ...form, user_email: user.email } });
+      updateMut.mutate({ id: editingProfile.id, data: payload });
     } else {
-      createMut.mutate({ ...form, user_email: user.email });
+      createMut.mutate(payload);
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PROFILE_AVATAR_FALLBACK } from '@/data/profileAvatars';
+import { PROFILE_AVATAR_FALLBACK, normalizeProfileAvatarUrl } from '@/data/profileAvatars';
 
 /**
  * Avatar com object-cover, fallback se a URL falhar (sem quebrar layout).
@@ -12,7 +12,8 @@ export default function ProfileAvatarImage({
   decoding = 'async',
 }) {
   const [failed, setFailed] = useState(false);
-  const effective = failed || !src ? PROFILE_AVATAR_FALLBACK : src;
+  const normalizedSrc = normalizeProfileAvatarUrl(src);
+  const effective = failed || !normalizedSrc ? PROFILE_AVATAR_FALLBACK : normalizedSrc;
 
   return (
     <img
