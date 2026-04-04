@@ -85,7 +85,6 @@ const HIGH_PRIORITY_IDS = new Set([
   'movie-it-bem-vindos-a-derry-2025',
   'movie-out-of-the-dark-2014',
   'movie-o-exorcista-1974',
-  'movie-panico-na-floresta-2004',
   'movie-halloween-1978',
   'movie-todo-mundo-em-panico-2000',
   'movie-a-morte-do-demonio-1981',

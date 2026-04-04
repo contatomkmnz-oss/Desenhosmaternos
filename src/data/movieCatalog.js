@@ -58,7 +58,7 @@ export const MOVIE_CATALOG = [
   },
   {
     id: 'movie-o-exorcista-1974',
-    kind: 'movie',
+    kind: 'series',
     title: 'Galinha Pintadinha',
     year: 1974,
     description:
@@ -400,17 +400,6 @@ export const MOVIE_CATALOG = [
       'Um garoto lidera uma equipe de filhotes que salvam a cidade em diversas missões.',
     categories: [L.mais, L.herois],
     total_views: 3100,
-    age_rating: 'Livre',
-  },
-  {
-    id: 'movie-panico-na-floresta-2004',
-    kind: 'movie',
-    title: 'Galinha Pintadinha',
-    year: 2004,
-    description:
-      'Série musical com personagens coloridos que ensinam através de canções infantis.',
-    categories: [L.musicais, L.pequenos],
-    total_views: 6700,
     age_rating: 'Livre',
   },
   {

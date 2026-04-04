@@ -4,6 +4,7 @@
  */
 import { profileAvatarsSeed } from '@/data/profileAvatars';
 import { barneyEpisodes } from '@/data/barneyEpisodes';
+import { galinhaPintadinhaEpisodes } from '@/data/galinhaPintadinhaEpisodes';
 import { buildSeriesRowsFromMovieCatalog } from '@/data/movieCatalog';
 import { DEMO_VIDEO_MP4 } from '@/constants/demoVideo';
 
@@ -98,6 +99,7 @@ export function buildMockSeed() {
         duration: 596,
       },
       ...barneyEpisodes,
+      ...galinhaPintadinhaEpisodes,
     ],
     FeaturedBanner: [
       { id: 'fb-1', series_id: 'movie-o-exorcista-1974', order: 0, active: true },
