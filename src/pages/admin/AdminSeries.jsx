@@ -161,6 +161,9 @@ function normalizeUrl(value) {
 function isCorruptedCoverUrl(url) {
   const value = normalizeUrl(url);
   if (!value) return false;
+  // Upload manual em base64 (jpeg/png/webp/gif) é válido; só marcamos como corrompido SVG data-URL
+  // e outros data: não-imagem (ex.: placeholders antigos em SVG).
+  if (/^data:image\/(jpeg|jpg|pjpeg|png|webp|gif|avif);/i.test(value)) return false;
   if (/^data:/i.test(value)) return true;
   if (/^\/images\/banners\//i.test(value)) return true;
   if (/^https?:\/\/(www\.)?ibb\.co\//i.test(value)) return true;
