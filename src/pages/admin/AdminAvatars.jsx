@@ -40,6 +40,9 @@ export default function AdminAvatars() {
           </Button>
         </div>
 
+        <p className="text-sm text-gray-400 mb-4">
+          Os avatares adicionados aqui aparecem na seleção de perfil, junto com os avatares infantis padrão do site.
+        </p>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
           {avatars.map(av => (
             <div key={av.id} className="relative group flex flex-col items-center">

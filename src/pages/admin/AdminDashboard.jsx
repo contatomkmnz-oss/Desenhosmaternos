@@ -89,7 +89,7 @@ export default function AdminDashboard() {
               { label: 'Gerenciar Usuários', to: '/AdminUsers', icon: Users },
               { label: 'Códigos de Acesso', to: '/AdminCodes', icon: Key },
               { label: 'Propostas de Conteúdo', to: '/AdminProposals', icon: Lightbulb },
-              { label: 'Avatares de terror', to: '/AdminAvatars', icon: Smile },
+              { label: 'Avatares (perfis)', to: '/AdminAvatars', icon: Smile },
             ].map(item => (
               <Link
                 key={item.to}

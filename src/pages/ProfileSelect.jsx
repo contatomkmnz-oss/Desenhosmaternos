@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { brand } from '@/data/siteContent';
 import { LS_ACTIVE_PROFILE } from '@/config/storageKeys';
 import { scheduleCatalogSync } from '@/lib/catalogPersistence';
-import { normalizeProfileAvatarUrl, profileAvatars, preloadProfileAvatars } from '@/data/profileAvatars';
+import {
+  mergeProfileAvatarChoices,
+  normalizeProfileAvatarUrl,
+  preloadProfileAvatars,
+} from '@/data/profileAvatars';
 import ProfileAvatarImage from '@/components/profile/ProfileAvatarImage';
 import { useAuth } from '@/lib/AuthContext';
 
@@ -31,14 +35,26 @@ export default function ProfileSelect() {
     preloadProfileAvatars();
   }, []);
 
+  const { data: adminAvatarRows = [] } = useQuery({
+    queryKey: ['avatars'],
+    queryFn: () => base44.entities.Avatar.list(),
+  });
+
   const { data: profiles = [] } = useQuery({
     queryKey: ['profiles', user?.email],
     queryFn: () => base44.entities.Profile.filter({ user_email: user.email }),
     enabled: !!user?.email,
   });
 
-  /** Lista fixa de 6 avatares infantis (fonte: src/data/profileAvatars.js) */
-  const allAvatars = profileAvatars;
+  /** Avatares base (imagens em `public/images/avatars`) + avatares criados em AdminAvatars */
+  const allAvatars = useMemo(() => mergeProfileAvatarChoices(adminAvatarRows), [adminAvatarRows]);
+
+  useEffect(() => {
+    allAvatars.forEach((a) => {
+      const img = new Image();
+      img.src = a.image_url;
+    });
+  }, [allAvatars]);
 
   const createMut = useMutation({
     mutationFn: (data) => base44.entities.Profile.create(data),
@@ -113,13 +129,13 @@ export default function ProfileSelect() {
 
             <div>
               <label className="text-sm text-gray-400 mb-2 block">Escolha um Avatar</label>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 max-w-xl mx-auto">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 max-w-3xl mx-auto">
                 {allAvatars.map((av) => {
                   const selected = form.avatar_url === av.image_url;
                   return (
                     <button
                       type="button"
-                      key={av.id || av.name}
+                      key={av.id || av.image_url}
                       onClick={() => setForm({ ...form, avatar_url: av.image_url })}
                       className={`group relative aspect-square w-full max-w-[88px] sm:max-w-none mx-auto rounded-lg overflow-hidden ring-2 transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#141414] ${
                         selected
