@@ -99,8 +99,8 @@ export default function SeriesDetail() {
 
   if (!series) {
     return (
-      <div className="min-h-screen bg-[#141414] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#E50914] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-kid-page-deep flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-kid-accent border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -110,7 +110,7 @@ export default function SeriesDetail() {
   const assistirFilme = isMovie(series) && !!movieStreamUrl;
 
   return (
-    <div className="min-h-screen bg-[#141414]">
+    <div className="min-h-screen bg-kid-page-deep">
       {/* Banner — começa do topo (Navbar stack é transparente/sobreposta) */}
       <div className="relative h-[52svh] min-h-[380px] md:h-[70vh]">
         {series.banner_url ? (
@@ -118,10 +118,10 @@ export default function SeriesDetail() {
         ) : series.cover_url ? (
           <img src={series.cover_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#E50914]/20 to-[#141414]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-kid-accent/20 to-kid-page-deep" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#141414]/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-kid-page-deep via-kid-page-deep/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-kid-page-deep/80 to-transparent" />
 
         <div className="absolute bottom-8 md:bottom-16 left-0 right-0 px-4 md:px-12">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
@@ -129,7 +129,7 @@ export default function SeriesDetail() {
             <div className="flex items-center gap-x-3 gap-y-2 text-xs sm:text-sm text-gray-300 mb-4 flex-wrap">
               {series.year && <span className="text-[#46D369] font-semibold">{series.year}</span>}
               {isMovie(series) ? (
-                <span className="text-[#E50914] font-bold uppercase text-xs tracking-wider">Filme</span>
+                <span className="text-kid-accent font-bold uppercase text-xs tracking-wider">Filme</span>
               ) : (
                 seasons.length > 0 && (
                   <span>
@@ -179,7 +179,7 @@ export default function SeriesDetail() {
       {/* Episódios (séries) ou bloco de filme por URL própria */}
       <div className="px-4 md:px-12 py-6 md:py-8 max-w-5xl">
         {assistirFilme ? (
-          <div className="rounded-xl border border-white/10 bg-[#1A1A1A]/80 p-8 text-center">
+          <div className="rounded-xl border border-white/10 bg-kid-surface/80 p-8 text-center">
             <h2 className="text-xl font-bold text-white mb-2">{series.title}</h2>
             <p className="text-gray-400 text-sm max-w-md mx-auto">
               Use o botão Assistir acima para abrir o filme. A reprodução será iniciada automaticamente.
@@ -194,7 +194,7 @@ export default function SeriesDetail() {
             <select
               value={selectedSeason}
               onChange={e => setSelectedSeason(Number(e.target.value))}
-              className="w-full sm:w-auto bg-[#2A2A2A] border border-white/20 text-white px-4 py-2 rounded text-sm font-medium appearance-none"
+              className="w-full sm:w-auto bg-kid-panel border border-white/20 text-white px-4 py-2 rounded text-sm font-medium appearance-none"
               style={{ colorScheme: 'dark' }}
             >
               {seasons.map(s => (
@@ -227,11 +227,11 @@ export default function SeriesDetail() {
 
                 {/* Thumbnail */}
                 <div className="shrink-0 w-24 sm:w-28 md:w-36 relative">
-                  <div className="aspect-video rounded overflow-hidden bg-[#2A2A2A]">
+                  <div className="aspect-video rounded overflow-hidden bg-kid-panel">
                     {ep.thumbnail_url || series.cover_url ? (
                       <img src={ep.thumbnail_url || series.cover_url} alt="" className={`w-full h-full object-cover transition-transform duration-300 ${!isLocked ? 'group-hover:scale-105' : 'opacity-40'}`} />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-[#333]">
+                      <div className="w-full h-full flex items-center justify-center bg-kid-surface-hover">
                         {isLocked ? <Lock className="w-5 h-5 text-gray-600" /> : <Play className="w-5 h-5 text-gray-600" />}
                       </div>
                     )}
@@ -246,15 +246,15 @@ export default function SeriesDetail() {
                     {/* Locked overlay */}
                     {isLocked && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 gap-1">
-                        <Lock className="w-4 h-4 text-[#FFC107]" />
-                        <span className="text-[9px] font-bold text-[#FFC107] text-center leading-tight px-1">EM BREVE</span>
+                        <Lock className="w-4 h-4 text-kid-sun" />
+                        <span className="text-[9px] font-bold text-kid-sun text-center leading-tight px-1">EM BREVE</span>
                       </div>
                     )}
                   </div>
                   {/* Progress bar */}
                   {progress > 0 && !isLocked && (
                     <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gray-700 rounded-b">
-                      <div className="h-full bg-[#E50914] rounded-b" style={{ width: `${progress}%` }} />
+                      <div className="h-full bg-kid-accent rounded-b" style={{ width: `${progress}%` }} />
                     </div>
                   )}
                 </div>
@@ -264,7 +264,7 @@ export default function SeriesDetail() {
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h3 className={`font-semibold text-sm md:text-base leading-snug ${isLocked ? 'text-gray-500' : isWatched(ep.id) ? 'text-gray-400' : 'text-white'}`}>{ep.title}</h3>
                     {isLocked ? (
-                      <span className="shrink-0 text-[10px] font-bold text-[#FFC107] bg-[#FFC107]/10 border border-[#FFC107]/30 px-1.5 py-0.5 rounded mt-0.5">INDISPONÍVEL</span>
+                      <span className="shrink-0 text-[10px] font-bold text-kid-sun bg-kid-sun/10 border border-kid-sun/30 px-1.5 py-0.5 rounded mt-0.5">INDISPONÍVEL</span>
                     ) : duration && (
                       <span className="shrink-0 text-xs text-gray-400 mt-0.5">{duration}</span>
                     )}
@@ -301,7 +301,7 @@ export default function SeriesDetail() {
               <Link
                 key={ep.id}
                 to={`/Player?episodeId=${ep.id}`}
-                className="flex items-start sm:items-center gap-3 sm:gap-4 px-2 py-4 rounded hover:bg-[#2A2A2A] transition-colors group border-b border-white/5 last:border-b-0"
+                className="flex items-start sm:items-center gap-3 sm:gap-4 px-2 py-4 rounded hover:bg-kid-panel transition-colors group border-b border-white/5 last:border-b-0"
               >
                 {rowContent}
               </Link>

@@ -56,7 +56,7 @@ export default function AdminBanner() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -74,7 +74,7 @@ export default function AdminBanner() {
 
         {loadingBanners ? (
           <div className="flex justify-center py-20">
-            <RefreshCw className="w-6 h-6 animate-spin text-[#E50914]" />
+            <RefreshCw className="w-6 h-6 animate-spin text-kid-accent" />
           </div>
         ) : (
           <div className="space-y-3">
@@ -83,10 +83,10 @@ export default function AdminBanner() {
               return (
                 <div
                   key={banner.id}
-                  className="flex items-center gap-4 bg-[#1A1A1A] rounded-xl p-4 border border-white/5"
+                  className="flex items-center gap-4 bg-kid-surface rounded-xl p-4 border border-white/5"
                 >
                   {/* Order number */}
-                  <div className="w-8 h-8 rounded-full bg-[#E50914]/20 text-[#E50914] flex items-center justify-center font-bold text-sm flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-kid-accent/20 text-kid-accent flex items-center justify-center font-bold text-sm flex-shrink-0">
                     {banner.order}
                   </div>
 
@@ -152,7 +152,7 @@ export default function AdminBanner() {
                   Adicionar série ao banner ({sortedBanners.length})
                 </button>
               ) : (
-                <div className="bg-[#1A1A1A] rounded-xl p-4 border border-[#E50914]/30">
+                <div className="bg-kid-surface rounded-xl p-4 border border-kid-accent/30">
                   <p className="text-gray-400 text-sm mb-3">Escolha uma série para o slot {addingSlot}:</p>
                   <div className="flex gap-3">
                     <div className="flex-1">
@@ -161,10 +161,10 @@ export default function AdminBanner() {
                           createMut.mutate({ series_id: seriesId, order: addingSlot, active: true });
                         }}
                       >
-                        <SelectTrigger className="bg-[#2A2A2A] border-white/10 text-white">
+                        <SelectTrigger className="bg-kid-panel border-white/10 text-white">
                           <SelectValue placeholder="Selecione uma série..." />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#2A2A2A] border-white/10">
+                        <SelectContent className="bg-kid-panel border-white/10">
                           {allSeries
                             .filter(s => !banners.some(b => b.series_id === s.id))
                             .map(s => (

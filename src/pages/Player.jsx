@@ -123,7 +123,7 @@ export default function Player() {
   if (waiting) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#E50914] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-kid-accent border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -132,7 +132,7 @@ export default function Player() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center text-gray-400 px-4">
         <p className="mb-4">Episódio não encontrado.</p>
-        <button type="button" onClick={() => navigate(-1)} className="text-[#E50914] hover:underline">Voltar</button>
+        <button type="button" onClick={() => navigate(-1)} className="text-kid-accent hover:underline">Voltar</button>
       </div>
     );
   }
@@ -141,7 +141,7 @@ export default function Player() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center text-gray-400 px-4">
         <p className="mb-4">Conteúdo não encontrado.</p>
-        <button type="button" onClick={() => navigate(-1)} className="text-[#E50914] hover:underline">Voltar</button>
+        <button type="button" onClick={() => navigate(-1)} className="text-kid-accent hover:underline">Voltar</button>
       </div>
     );
   }
@@ -153,7 +153,7 @@ export default function Player() {
           Este título não tem <strong className="text-white">URL do filme</strong> configurada, ou não é um filme.
         </p>
         <p className="text-sm text-gray-500 mb-4">Define a URL em Admin → Séries e Filmes (filme).</p>
-        <button type="button" onClick={() => navigate(-1)} className="text-[#E50914] hover:underline">Voltar</button>
+        <button type="button" onClick={() => navigate(-1)} className="text-kid-accent hover:underline">Voltar</button>
       </div>
     );
   }
@@ -162,7 +162,7 @@ export default function Player() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center text-gray-400 px-4">
         <p className="mb-4">Não foi possível carregar a série.</p>
-        <button type="button" onClick={() => navigate(-1)} className="text-[#E50914] hover:underline">Voltar</button>
+        <button type="button" onClick={() => navigate(-1)} className="text-kid-accent hover:underline">Voltar</button>
       </div>
     );
   }
@@ -170,7 +170,7 @@ export default function Player() {
   if (!isMoviePlayback && (!episode || !series)) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#E50914] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-kid-accent border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -202,7 +202,7 @@ export default function Player() {
               </button>
             )}
             {!isMoviePlayback && (
-              <button onClick={() => setShowSidebar(!showSidebar)} className="p-2 text-white hover:text-[#E50914] transition-colors">
+              <button onClick={() => setShowSidebar(!showSidebar)} className="p-2 text-white hover:text-kid-accent transition-colors">
                 <List className="w-5 h-5" />
               </button>
             )}
@@ -240,7 +240,7 @@ export default function Player() {
 
       {/* Episode sidebar — só episódios */}
       {!isMoviePlayback && showSidebar && (
-        <div className="fixed top-0 right-0 bottom-0 w-80 bg-[#1A1A1A] z-30 overflow-y-auto shadow-2xl border-l border-white/5">
+        <div className="fixed top-0 right-0 bottom-0 w-80 bg-kid-surface z-30 overflow-y-auto shadow-2xl border-l border-white/5">
           <div className="p-4 border-b border-white/5 flex items-center justify-between">
             <h3 className="font-bold text-white">Episódios</h3>
             <button onClick={() => setShowSidebar(false)} className="text-gray-400 hover:text-white">✕</button>
@@ -251,9 +251,9 @@ export default function Player() {
                 key={ep.id}
                 to={`/Player?episodeId=${ep.id}`}
                 onClick={() => setShowSidebar(false)}
-                className={`flex gap-3 p-3 hover:bg-white/5 transition-colors ${ep.id === episodeId ? 'bg-white/10 border-l-2 border-[#E50914]' : ''}`}
+                className={`flex gap-3 p-3 hover:bg-white/5 transition-colors ${ep.id === episodeId ? 'bg-white/10 border-l-2 border-kid-accent' : ''}`}
               >
-                <div className="shrink-0 w-24 aspect-video rounded overflow-hidden bg-[#2A2A2A]">
+                <div className="shrink-0 w-24 aspect-video rounded overflow-hidden bg-kid-panel">
                   {(ep.thumbnail_url || series?.cover_url) ? (
                     <img src={ep.thumbnail_url || series?.cover_url} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -275,7 +275,7 @@ export default function Player() {
         {isMoviePlayback ? (
           <>
             <h2 className="text-2xl font-bold text-white mb-2">{series.title}</h2>
-            <p className="text-sm text-[#E50914] font-semibold mb-4 uppercase tracking-wide">Filme</p>
+            <p className="text-sm text-kid-accent font-semibold mb-4 uppercase tracking-wide">Filme</p>
             {series.description && <p className="text-gray-300 leading-relaxed">{series.description}</p>}
           </>
         ) : (
@@ -291,7 +291,7 @@ export default function Player() {
             {nextEpisode && (
               <button
                 onClick={goToNextEpisode}
-                className="inline-flex items-center gap-2 mt-6 bg-[#E50914] hover:bg-[#FF3D3D] text-white px-6 py-3 rounded-md font-semibold transition-colors"
+                className="inline-flex items-center gap-2 mt-6 bg-kid-accent hover:bg-kid-accent-hover text-white px-6 py-3 rounded-md font-semibold transition-colors"
               >
                 <SkipForward className="w-5 h-5" />
                 Próximo: {nextEpisode.title}

@@ -66,7 +66,7 @@ export default function Subscription() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] px-4 pt-24 pb-8">
+    <div className="min-h-screen bg-kid-page px-4 pt-24 pb-8">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-10">
@@ -75,8 +75,8 @@ export default function Subscription() {
           </button>
           <div>
             <h1 className="text-3xl font-black">
-              <span className="text-[#E50914]">{subscriptionPage.titleHtml[0]}</span>
-              <span className="text-[#FFC107]">{subscriptionPage.titleHtml[1]}</span>
+              <span className="text-kid-accent">{subscriptionPage.titleHtml[0]}</span>
+              <span className="text-kid-sun">{subscriptionPage.titleHtml[1]}</span>
               <span className="text-white">{subscriptionPage.titleHtml[2]}</span>
             </h1>
             <p className="text-gray-400 mt-1">{subscriptionPage.subtitle}</p>
@@ -85,7 +85,7 @@ export default function Subscription() {
 
         {loadingStatus ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-[#E50914]" />
+            <Loader2 className="w-8 h-8 animate-spin text-kid-accent" />
           </div>
         ) : (
           <>
@@ -173,15 +173,15 @@ export default function Subscription() {
                 return (
                   <div
                     key={plan.id}
-                    className={`relative rounded-2xl border-2 p-6 bg-[#1A1A1A] transition-all ${plan.color} ${isCurrentPlan ? 'opacity-60' : 'hover:scale-105 cursor-pointer'}`}
+                    className={`relative rounded-2xl border-2 p-6 bg-kid-surface transition-all ${plan.color} ${isCurrentPlan ? 'opacity-60' : 'hover:scale-105 cursor-pointer'}`}
                   >
                     {plan.badge && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#E50914] text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-kid-accent text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
                         {plan.badge}
                       </div>
                     )}
                     <div className="flex items-center gap-3 mb-4">
-                      <Icon className="w-6 h-6 text-[#E50914]" />
+                      <Icon className="w-6 h-6 text-kid-accent" />
                       <h2 className="text-xl font-bold text-white">{plan.name}</h2>
                     </div>
                     <div className="mb-6">
@@ -199,7 +199,7 @@ export default function Subscription() {
                     <Button
                       onClick={() => !isCurrentPlan && handleSelectPlan(plan)}
                       disabled={isCurrentPlan}
-                      className={`w-full font-bold ${isCurrentPlan ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-[#E50914] hover:bg-[#FF3D3D] text-white'}`}
+                      className={`w-full font-bold ${isCurrentPlan ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-kid-accent hover:bg-kid-accent-hover text-white'}`}
                     >
                       {isCurrentPlan ? "Plano Atual" : isActive ? "Mudar para este plano" : "Assinar Agora"}
                     </Button>

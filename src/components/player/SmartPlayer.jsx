@@ -115,7 +115,7 @@ export default function SmartPlayer({
     return (
       <div className="w-full h-full flex items-center justify-center bg-black text-center px-6">
         <div>
-          <AlertCircle className="w-14 h-14 text-[#E50914] mx-auto mb-4" />
+          <AlertCircle className="w-14 h-14 text-kid-accent mx-auto mb-4" />
           <p className="text-white font-medium mb-2">{title || 'Erro de reproducao'}</p>
           <p className="text-sm text-gray-400">{playbackError}</p>
         </div>

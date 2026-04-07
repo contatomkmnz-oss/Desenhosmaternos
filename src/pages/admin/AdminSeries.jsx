@@ -32,7 +32,7 @@ function ManualImageUrlInput({ value, onChange }) {
       placeholder="https://…"
       value={value || ''}
       onChange={(e) => onChange(e.target.value)}
-      className="bg-[#141414] border border-white/10 font-mono text-xs h-9"
+      className="bg-kid-page-deep border border-white/10 font-mono text-xs h-9"
     />
   );
 }
@@ -189,7 +189,7 @@ function getStatusPillClasses(statusKey) {
 function getPriorityBadgeClasses(priorityKey) {
   switch (priorityKey) {
     case 'high':
-      return 'bg-[#E50914]/15 text-[#ff7a80] border-[#E50914]/20';
+      return 'bg-kid-accent/15 text-pink-200 border-kid-accent/20';
     case 'medium':
       return 'bg-yellow-500/15 text-yellow-300 border-yellow-500/20';
     case 'low':
@@ -666,7 +666,7 @@ export default function AdminSeries() {
   }, [queueAdvanceRequest, queueList]);
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
           <div className="flex items-center gap-4 flex-1">
@@ -674,10 +674,10 @@ export default function AdminSeries() {
             <h1 className="text-2xl font-bold">Séries e Filmes</h1>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button onClick={() => openCreate(false)} className="bg-[#E50914] hover:bg-[#FF3D3D]">
+            <Button onClick={() => openCreate(false)} className="bg-kid-accent hover:bg-kid-accent-hover">
               <Plus className="w-4 h-4 mr-2" /> Nova série
             </Button>
-            <Button onClick={() => openCreate(true)} variant="outline" className="border-[#E50914] text-[#E50914] hover:bg-[#E50914]/10">
+            <Button onClick={() => openCreate(true)} variant="outline" className="border-kid-accent text-kid-accent hover:bg-kid-accent/10">
               <Plus className="w-4 h-4 mr-2" /> Novo filme
             </Button>
           </div>
@@ -694,7 +694,7 @@ export default function AdminSeries() {
               type="button"
               onClick={() => setListFilter(t.id)}
               className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                listFilter === t.id ? 'bg-white text-black' : 'bg-[#1A1A1A] text-gray-400 hover:text-white'
+                listFilter === t.id ? 'bg-white text-black' : 'bg-kid-surface text-gray-400 hover:text-white'
               }`}
             >
               {t.label}
@@ -708,13 +708,13 @@ export default function AdminSeries() {
             placeholder="Pesquisar desenhos, filmes, categorias..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 bg-[#1A1A1A] border-white/10 text-white placeholder:text-gray-500"
+            className="pl-10 bg-kid-surface border-white/10 text-white placeholder:text-gray-500"
           />
         </div>
 
-        <div className="mb-6 rounded-xl border border-white/10 bg-[#151515] p-4 space-y-4">
+        <div className="mb-6 rounded-xl border border-white/10 bg-kid-page-deep p-4 space-y-4">
           {queueList.length > 0 ? (
-            <div className="rounded-lg border border-[#E50914]/30 bg-[#E50914]/5 px-3 py-2 text-sm text-gray-200">
+            <div className="rounded-lg border border-kid-accent/30 bg-kid-accent/5 px-3 py-2 text-sm text-gray-200">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <span>
                   Modo fila ativo: {editing && currentPendingIndex >= 0 ? `${currentPendingIndex + 1} de ${queueList.length}` : `1 de ${queueList.length}`} pendentes.
@@ -752,8 +752,8 @@ export default function AdminSeries() {
                 onClick={() => setCoverFilter(filter.id)}
                 className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                   coverFilter === filter.id
-                    ? 'bg-[#E50914] text-white'
-                    : 'bg-[#222] text-gray-400 hover:text-white'
+                    ? 'bg-kid-accent text-white'
+                    : 'bg-kid-surface-hover text-gray-400 hover:text-white'
                 }`}
               >
                 {filter.label}
@@ -777,8 +777,8 @@ export default function AdminSeries() {
           {filteredList.map(s => {
             const meta = getSeriesCoverMeta(s, originalById, duplicateTitles);
             return (
-            <div key={s.id} className={`flex items-center gap-4 p-4 rounded-lg transition-colors ${editing?.id === s.id ? 'bg-[#222] ring-1 ring-[#E50914]/40' : 'bg-[#1A1A1A] hover:bg-[#222]'}`}>
-              <div className="shrink-0 w-16 h-24 rounded overflow-hidden bg-[#2A2A2A]">
+            <div key={s.id} className={`flex items-center gap-4 p-4 rounded-lg transition-colors ${editing?.id === s.id ? 'bg-kid-surface-hover ring-1 ring-kid-accent/40' : 'bg-kid-surface hover:bg-kid-surface-hover'}`}>
+              <div className="shrink-0 w-16 h-24 rounded overflow-hidden bg-kid-panel">
                 <AdminPosterThumb url={s.cover_url} title={s.title} />
               </div>
               <div className="flex-1 min-w-0">
@@ -795,10 +795,10 @@ export default function AdminSeries() {
                       Título duplicado
                     </Badge>
                   )}
-                  <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded ${s.content_type === CONTENT_TYPE_MOVIE ? 'bg-[#E50914]/20 text-[#E50914]' : 'bg-white/10 text-gray-400'}`}>
+                  <span className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded ${s.content_type === CONTENT_TYPE_MOVIE ? 'bg-kid-accent/20 text-kid-accent' : 'bg-white/10 text-gray-400'}`}>
                     {s.content_type === CONTENT_TYPE_MOVIE ? 'Filme' : 'Série'}
                   </span>
-                  {s.featured && <Star className="w-4 h-4 text-[#FFC107] fill-current shrink-0" />}
+                  {s.featured && <Star className="w-4 h-4 text-kid-sun fill-current shrink-0" />}
                   {!s.published && <EyeOff className="w-4 h-4 text-gray-500 shrink-0" />}
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
@@ -812,7 +812,7 @@ export default function AdminSeries() {
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 {s.content_type !== CONTENT_TYPE_MOVIE && (
-                  <Link to={`/AdminEpisodes?seriesId=${s.id}`} className="text-xs text-[#E50914] hover:text-[#FF3D3D] px-3 py-1 border border-[#E50914] rounded">
+                  <Link to={`/AdminEpisodes?seriesId=${s.id}`} className="text-xs text-kid-accent hover:text-kid-accent-hover px-3 py-1 border border-kid-accent rounded">
                     Episódios
                   </Link>
                 )}
@@ -825,7 +825,7 @@ export default function AdminSeries() {
             <div className="text-center py-12 text-gray-500">
               <p>Nenhum título neste filtro.</p>
               <div className="flex gap-2 justify-center mt-4">
-                <Button onClick={() => openCreate(false)} className="bg-[#E50914] hover:bg-[#FF3D3D]">Nova série</Button>
+                <Button onClick={() => openCreate(false)} className="bg-kid-accent hover:bg-kid-accent-hover">Nova série</Button>
                 <Button onClick={() => openCreate(true)} variant="outline" className="border-gray-600">Novo filme</Button>
               </div>
             </div>
@@ -833,7 +833,7 @@ export default function AdminSeries() {
         </div>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="bg-[#1A1A1A] border-white/10 text-white max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className="bg-kid-surface border-white/10 text-white max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editing
@@ -903,7 +903,7 @@ export default function AdminSeries() {
                   value={form.content_type}
                   onValueChange={(v) => setForm({ ...form, content_type: v })}
                 >
-                  <SelectTrigger className="bg-[#2A2A2A] border-none">
+                  <SelectTrigger className="bg-kid-panel border-none">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -913,8 +913,8 @@ export default function AdminSeries() {
                 </Select>
               </div>
               {form.content_type === CONTENT_TYPE_MOVIE && (
-                <div className="rounded-lg border border-[#E50914]/40 bg-[#E50914]/5 p-4 space-y-2">
-                  <p className="text-xs font-semibold text-[#E50914] uppercase tracking-wide">URL do filme</p>
+                <div className="rounded-lg border border-kid-accent/40 bg-kid-accent/5 p-4 space-y-2">
+                  <p className="text-xs font-semibold text-kid-accent uppercase tracking-wide">URL do filme</p>
                   <p className="text-[11px] text-gray-400 leading-snug">
                     Cole a URL do vídeo do filme. Bunny.net é prioridade, mas também aceitamos HLS, MP4, Vimeo, YouTube e embeds compatíveis.
                   </p>
@@ -922,7 +922,7 @@ export default function AdminSeries() {
                     placeholder="https://…"
                     value={form.videoUrl}
                     onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
-                    className="bg-[#141414] border border-white/10 font-mono text-sm"
+                    className="bg-kid-page-deep border border-white/10 font-mono text-sm"
                   />
                   <div className="grid grid-cols-2 gap-2 text-[11px]">
                     <div className="rounded-md bg-black/20 px-3 py-2 text-gray-300">
@@ -938,15 +938,15 @@ export default function AdminSeries() {
                     placeholder="Trailer (opcional)"
                     value={form.trailerUrl}
                     onChange={(e) => setForm({ ...form, trailerUrl: e.target.value })}
-                    className="bg-[#141414] border border-white/10 font-mono text-sm"
+                    className="bg-kid-page-deep border border-white/10 font-mono text-sm"
                   />
                   <p className="text-[11px] text-gray-500">
                     Detectado: {getVideoSourceLabel(detectedMovieSource)}
                   </p>
                 </div>
               )}
-              <Input placeholder="Título" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="bg-[#2A2A2A] border-none" />
-              <Textarea placeholder="Descrição" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="bg-[#2A2A2A] border-none h-24" />
+              <Input placeholder="Título" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="bg-kid-panel border-none" />
+              <Textarea placeholder="Descrição" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="bg-kid-panel border-none h-24" />
               {form.content_type === CONTENT_TYPE_MOVIE ? (
                 <div>
                   <p className="text-xs text-gray-400 mb-1">Categorias Netflix (uma por linha — mesmo filme em várias fileiras)</p>
@@ -954,7 +954,7 @@ export default function AdminSeries() {
                     placeholder={`${L.mais}\n${L.pequenos}\n${L.edu}`}
                     value={form.categoriesText}
                     onChange={(e) => setForm({ ...form, categoriesText: e.target.value })}
-                    className="bg-[#2A2A2A] border-none min-h-[120px] font-mono text-sm"
+                    className="bg-kid-panel border-none min-h-[120px] font-mono text-sm"
                   />
                 </div>
               ) : (
@@ -962,13 +962,13 @@ export default function AdminSeries() {
                   placeholder="Categorias (ex: Terror, Comédia)"
                   value={form.category}
                   onChange={(e) => setForm({ ...form, category: e.target.value })}
-                  className="bg-[#2A2A2A] border-none"
+                  className="bg-kid-panel border-none"
                 />
               )}
               <div className="grid grid-cols-2 gap-3">
-                <Input placeholder="Ano" type="number" value={form.year} onChange={e => setForm({ ...form, year: e.target.value })} className="bg-[#2A2A2A] border-none" />
+                <Input placeholder="Ano" type="number" value={form.year} onChange={e => setForm({ ...form, year: e.target.value })} className="bg-kid-panel border-none" />
                 <Select value={form.age_rating} onValueChange={v => setForm({ ...form, age_rating: v })}>
-                  <SelectTrigger className="bg-[#2A2A2A] border-none"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-kid-panel border-none"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {['Livre', '10+', '12+', '14+', '16+', '18+'].map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                   </SelectContent>
@@ -1016,7 +1016,7 @@ export default function AdminSeries() {
                   })
                 }
               >
-                <SelectTrigger className="bg-[#2A2A2A] border-none">
+                <SelectTrigger className="bg-kid-panel border-none">
                   <SelectValue placeholder="Nenhuma seção especial" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1033,7 +1033,7 @@ export default function AdminSeries() {
                   onClick={() => {
                     handleSubmit('close');
                   }}
-                  className="w-full bg-[#E50914] hover:bg-[#FF3D3D]"
+                  className="w-full bg-kid-accent hover:bg-kid-accent-hover"
                 >
                   {editing ? 'Salvar Alterações' : 'Criar'}
                 </Button>

@@ -32,7 +32,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -42,14 +42,14 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-8 bg-[#1A1A1A] p-1 rounded-xl w-fit border border-white/5">
+        <div className="flex gap-1 mb-8 bg-kid-surface p-1 rounded-xl w-fit border border-white/5">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                 activeTab === tab.id
-                  ? 'bg-[#E50914] text-white shadow'
+                  ? 'bg-kid-accent text-white shadow'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -67,7 +67,7 @@ export default function AdminDashboard() {
             <Link
               key={s.label}
               to={s.link}
-              className="bg-[#1A1A1A] rounded-xl p-5 hover:bg-[#222] transition-colors group"
+              className="bg-kid-surface rounded-xl p-5 hover:bg-kid-surface-hover transition-colors group"
             >
               <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${s.color} flex items-center justify-center mb-3`}>
                 <s.icon className="w-5 h-5 text-white" />
@@ -94,9 +94,9 @@ export default function AdminDashboard() {
               <Link
                 key={item.to}
                 to={item.to}
-                className="flex items-center gap-4 p-4 bg-[#1A1A1A] rounded-lg hover:bg-[#222] transition-colors"
+                className="flex items-center gap-4 p-4 bg-kid-surface rounded-lg hover:bg-kid-surface-hover transition-colors"
               >
-                <item.icon className="w-5 h-5 text-[#E50914]" />
+                <item.icon className="w-5 h-5 text-kid-accent" />
                 <span className="font-medium">{item.label}</span>
               </Link>
             ))}
@@ -107,13 +107,13 @@ export default function AdminDashboard() {
               <h2 className="text-lg font-bold mb-3">Propostas Pendentes</h2>
               <div className="space-y-2">
                 {proposals.slice(0, 5).map(p => (
-                  <div key={p.id} className="p-4 bg-[#1A1A1A] rounded-lg">
+                  <div key={p.id} className="p-4 bg-kid-surface rounded-lg">
                     <p className="font-medium text-sm">{p.suggested_title}</p>
                     <p className="text-xs text-gray-400 mt-1 line-clamp-1">{p.description}</p>
                     <p className="text-[10px] text-gray-500 mt-1">por {p.user_email || 'anônimo'}</p>
                   </div>
                 ))}
-                <Link to="/AdminProposals" className="block text-center text-sm text-[#E50914] hover:text-[#FF3D3D] py-2">
+                <Link to="/AdminProposals" className="block text-center text-sm text-kid-accent hover:text-kid-accent-hover py-2">
                   Ver todas →
                 </Link>
               </div>

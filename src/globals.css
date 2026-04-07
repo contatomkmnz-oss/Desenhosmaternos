@@ -1,9 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #0F0F0F;
-  color: #FFFFFF;
+  font-family: 'Nunito', 'Fredoka', system-ui, sans-serif;
+  background-color: #252047;
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(244, 114, 182, 0.18), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 100% 50%, rgba(125, 211, 252, 0.08), transparent 45%),
+    linear-gradient(180deg, #2a2452 0%, #252047 35%, #1a1638 100%);
+  color: #ffffff;
+  font-feature-settings: 'kern' 1;
 }
 
 /* Safe area aplicada no root do app, não no body — evita conflito com layout */
@@ -36,14 +41,14 @@ html {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0F0F0F;
+  background: #252047;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 3px;
+  background: #5b4f8a;
+  border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #7c6fad;
 }
 
 /* Hide scrollbar for carousels */

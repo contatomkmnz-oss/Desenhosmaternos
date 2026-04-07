@@ -15,18 +15,18 @@ export default function SubscriptionBanner({ subscription, isActive, isTrial }) 
   // Trial: avisa nos últimos 5 dias
   if (isTrial && daysLeft !== null && daysLeft <= 5) {
     return (
-      <div className="bg-[#FFC107]/10 border-b border-[#FFC107]/30 px-4 py-2.5 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-[#FFC107]">
+      <div className="bg-kid-sun/10 border-b border-kid-sun/30 px-4 py-2.5 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-sm text-kid-sun">
           <Gift className="w-4 h-4 shrink-0" />
           <span>
             Seu período grátis encerra em <strong>{daysLeft} dia{daysLeft !== 1 ? 's' : ''}</strong>. Assine para não perder o acesso!
           </span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <button onClick={() => navigate('/Subscription')} className="text-xs text-[#FFC107] hover:text-yellow-300 font-bold underline">
+          <button onClick={() => navigate('/Subscription')} className="text-xs text-kid-sun hover:text-yellow-300 font-bold underline">
             Assinar agora
           </button>
-          <button onClick={() => setDismissed(true)} className="text-[#FFC107]/60 hover:text-[#FFC107]">
+          <button onClick={() => setDismissed(true)} className="text-kid-sun/60 hover:text-kid-sun">
             <X className="w-4 h-4" />
           </button>
         </div>

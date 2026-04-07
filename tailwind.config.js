@@ -4,12 +4,32 @@ module.exports = {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ['Nunito', 'Fredoka', 'system-ui', 'sans-serif'],
+  			display: ['Fredoka', 'Nunito', 'system-ui', 'sans-serif'],
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			sm: 'calc(var(--radius) - 4px)',
+  			'2xl': '1.25rem',
+  			'3xl': '1.5rem',
   		},
   		colors: {
+  			kid: {
+  				page: '#252047',
+  				'page-deep': '#1a1638',
+  				panel: '#3d3758',
+  				surface: '#342e58',
+  				'surface-hover': '#3d375f',
+  				accent: '#f472b6',
+  				'accent-hover': '#ec4899',
+  				'accent-press': '#db2777',
+  				sun: '#fcd34d',
+  				'sun-deep': '#fbbf24',
+  				mint: '#6ee7b7',
+  				sky: '#7dd3fc',
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

@@ -45,7 +45,7 @@ export default function Search() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-4xl mx-auto">
         <div className="relative mb-8">
           <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -54,7 +54,7 @@ export default function Search() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && logSearch()}
-            className="w-full pl-12 pr-12 py-4 text-lg bg-[#1A1A1A] border-none text-white rounded-lg focus:ring-2 focus:ring-[#E50914] placeholder:text-gray-500"
+            className="w-full pl-12 pr-12 py-4 text-lg bg-kid-surface border-none text-white rounded-lg focus:ring-2 focus:ring-kid-accent placeholder:text-gray-500"
             autoFocus
           />
           {query && (
@@ -74,7 +74,7 @@ export default function Search() {
                 <button
                   key={t.id}
                   onClick={() => setQuery(t.term)}
-                  className="px-4 py-2 rounded-full bg-[#1A1A1A] text-sm text-gray-300 hover:bg-[#2A2A2A] hover:text-white transition-all"
+                  className="px-4 py-2 rounded-full bg-kid-surface text-sm text-gray-300 hover:bg-kid-panel hover:text-white transition-all"
                 >
                   {t.term}
                 </button>
@@ -98,7 +98,7 @@ export default function Search() {
           >
             {results.map(s => (
               <Link key={s.id} to={`/SeriesDetail?id=${s.id}`} className="group">
-                <div className="aspect-[2/3] rounded-lg overflow-hidden bg-[#1A1A1A] relative">
+                <div className="aspect-[2/3] rounded-lg overflow-hidden bg-kid-surface relative">
                   {s.cover_url ? (
                     <img
                       src={imageUrlWithCacheBust(s.cover_url, s)}
@@ -106,7 +106,7 @@ export default function Search() {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E50914]/20 to-[#1A1A1A] p-2">
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-kid-accent/20 to-kid-surface p-2">
                       <span className="text-xs font-bold text-center">{s.title}</span>
                     </div>
                   )}

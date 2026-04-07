@@ -30,12 +30,12 @@ export default function AdminAvatars() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-4 mb-6">
           <Link to="/Admin" className="text-gray-400 hover:text-white"><ArrowLeft className="w-5 h-5" /></Link>
           <h1 className="text-2xl font-bold flex-1">Avatares Infantis</h1>
-          <Button onClick={() => setDialogOpen(true)} className="bg-[#E50914] hover:bg-[#FF3D3D]">
+          <Button onClick={() => setDialogOpen(true)} className="bg-kid-accent hover:bg-kid-accent-hover">
             <Plus className="w-4 h-4 mr-2" /> Novo avatar
           </Button>
         </div>
@@ -46,7 +46,7 @@ export default function AdminAvatars() {
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
           {avatars.map(av => (
             <div key={av.id} className="relative group flex flex-col items-center">
-              <div className="w-full aspect-square rounded-lg overflow-hidden bg-[#1A1A1A] ring-1 ring-white/10 transition-transform duration-200 group-hover:scale-105">
+              <div className="w-full aspect-square rounded-lg overflow-hidden bg-kid-surface ring-1 ring-white/10 transition-transform duration-200 group-hover:scale-105">
                 <ProfileAvatarImage src={av.image_url} alt={av.name} className="h-full w-full object-cover" />
               </div>
               <p className="text-xs text-gray-400 mt-1 truncate w-full text-center">{av.name}</p>
@@ -66,12 +66,12 @@ export default function AdminAvatars() {
         </div>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="bg-[#1A1A1A] border-white/10 text-white max-w-sm">
+          <DialogContent className="bg-kid-surface border-white/10 text-white max-w-sm">
             <DialogHeader><DialogTitle>Novo avatar infantil</DialogTitle></DialogHeader>
             <div className="space-y-3">
-              <Input placeholder="Nome (ex: Leaozinho, Estrelinha...)" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="bg-[#2A2A2A] border-none" />
+              <Input placeholder="Nome (ex: Leaozinho, Estrelinha...)" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="bg-kid-panel border-none" />
               <ImageUpload value={form.image_url} onChange={v => setForm({ ...form, image_url: v })} placeholder="Clique para enviar a imagem" aspectRatio="square" />
-              <Button onClick={() => createMut.mutate(form)} disabled={!form.name.trim() || !form.image_url.trim()} className="w-full bg-[#E50914] hover:bg-[#FF3D3D]">
+              <Button onClick={() => createMut.mutate(form)} disabled={!form.name.trim() || !form.image_url.trim()} className="w-full bg-kid-accent hover:bg-kid-accent-hover">
                 Salvar
               </Button>
             </div>

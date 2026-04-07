@@ -67,7 +67,7 @@ export default function CheckoutModal({ plan, onClose, onSuccess }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="bg-[#1A1A1A] rounded-2xl border border-white/10 w-full max-w-md shadow-2xl">
+      <div className="bg-kid-surface rounded-2xl border border-white/10 w-full max-w-md shadow-2xl">
         <div className="flex items-center justify-between p-5 border-b border-white/5">
           <div>
             <h2 className="text-white font-bold text-lg">Finalizar Assinatura</h2>
@@ -121,7 +121,7 @@ export default function CheckoutModal({ plan, onClose, onSuccess }) {
                 placeholder="Nome completo *"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="bg-[#2A2A2A] border-white/10 text-white placeholder:text-gray-500"
+                className="bg-kid-panel border-white/10 text-white placeholder:text-gray-500"
               />
               <Input
                 placeholder="CPF (somente números) *"
@@ -129,13 +129,13 @@ export default function CheckoutModal({ plan, onClose, onSuccess }) {
                 onChange={(e) =>
                   setForm({ ...form, cpf: e.target.value.replace(/\D/g, '').slice(0, 11) })
                 }
-                className="bg-[#2A2A2A] border-white/10 text-white placeholder:text-gray-500"
+                className="bg-kid-panel border-white/10 text-white placeholder:text-gray-500"
               />
               <Input
                 placeholder="Celular (opcional)"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="bg-[#2A2A2A] border-white/10 text-white placeholder:text-gray-500"
+                className="bg-kid-panel border-white/10 text-white placeholder:text-gray-500"
               />
               {error && <p className="text-red-400 text-sm">{error}</p>}
               <div className="flex gap-3 pt-2">
@@ -146,7 +146,7 @@ export default function CheckoutModal({ plan, onClose, onSuccess }) {
                 >
                   Voltar
                 </Button>
-                <Button onClick={handleSubmit} className="flex-1 bg-[#E50914] hover:bg-[#FF3D3D]">
+                <Button onClick={handleSubmit} className="flex-1 bg-kid-accent hover:bg-kid-accent-hover">
                   Continuar
                 </Button>
               </div>
@@ -155,15 +155,15 @@ export default function CheckoutModal({ plan, onClose, onSuccess }) {
 
           {step === 'processing' && (
             <div className="flex flex-col items-center py-10 gap-4">
-              <Loader2 className="w-10 h-10 animate-spin text-[#E50914]" />
+              <Loader2 className="w-10 h-10 animate-spin text-kid-accent" />
               <p className="text-gray-300">Gerando sua cobrança...</p>
             </div>
           )}
 
           {step === 'demo' && (
             <div className="flex flex-col items-center gap-4 py-4 text-center">
-              <div className="w-16 h-16 rounded-full bg-[#E50914]/20 flex items-center justify-center">
-                <Sparkles className="w-8 h-8 text-[#FFC107]" />
+              <div className="w-16 h-16 rounded-full bg-kid-accent/20 flex items-center justify-center">
+                <Sparkles className="w-8 h-8 text-kid-sun" />
               </div>
               <div>
                 <p className="text-white font-bold text-lg">Modo demonstração</p>
@@ -173,7 +173,7 @@ export default function CheckoutModal({ plan, onClose, onSuccess }) {
               <Button
                 type="button"
                 onClick={simulatePaidSubscription}
-                className="w-full bg-[#E50914] hover:bg-[#FF3D3D]"
+                className="w-full bg-kid-accent hover:bg-kid-accent-hover"
               >
                 Simular assinatura ativa (local)
               </Button>
@@ -200,7 +200,7 @@ export default function CheckoutModal({ plan, onClose, onSuccess }) {
                 </p>
               </div>
               <a href={billingUrl} target="_blank" rel="noopener noreferrer" className="w-full">
-                <Button className="w-full bg-[#E50914] hover:bg-[#FF3D3D] gap-2">
+                <Button className="w-full bg-kid-accent hover:bg-kid-accent-hover gap-2">
                   <ExternalLink className="w-4 h-4" />
                   Pagar Agora
                 </Button>

@@ -55,17 +55,17 @@ export default function ActivateCode() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-kid-page flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black mb-2">
-            <span className="text-[#E50914]">KIDS</span>
-            <span className="text-[#FFC107]">Play</span>
+            <span className="text-kid-accent">KIDS</span>
+            <span className="text-kid-sun">Play</span>
           </h1>
           <p className="text-gray-400">Ative sua conta com um código de acesso</p>
         </div>
 
-        <div className="bg-[#1A1A1A] rounded-xl p-6 border border-white/5">
+        <div className="bg-kid-surface rounded-xl p-6 border border-white/5">
           {success ? (
             <div className="text-center py-4">
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
@@ -74,8 +74,8 @@ export default function ActivateCode() {
             </div>
           ) : (
             <>
-              <div className="flex items-center gap-3 mb-6 p-3 bg-[#2A2A2A] rounded-lg">
-                <Key className="w-5 h-5 text-[#FFC107]" />
+              <div className="flex items-center gap-3 mb-6 p-3 bg-kid-panel rounded-lg">
+                <Key className="w-5 h-5 text-kid-sun" />
                 <p className="text-sm text-gray-300">
                   Insira o código de acesso que você recebeu ao adquirir o plano.
                 </p>
@@ -86,7 +86,7 @@ export default function ActivateCode() {
                 value={code}
                 onChange={(e) => { setCode(e.target.value.toUpperCase()); setError(''); }}
                 onKeyDown={(e) => e.key === 'Enter' && handleActivate()}
-                className="bg-[#2A2A2A] border-none text-lg text-center tracking-widest font-mono mb-4"
+                className="bg-kid-panel border-none text-lg text-center tracking-widest font-mono mb-4"
               />
 
               {error && (
@@ -99,7 +99,7 @@ export default function ActivateCode() {
               <Button
                 onClick={handleActivate}
                 disabled={loading || !code.trim()}
-                className="w-full bg-[#E50914] hover:bg-[#FF3D3D] py-3 text-base"
+                className="w-full bg-kid-accent hover:bg-kid-accent-hover py-3 text-base"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Ativar Código'}
               </Button>

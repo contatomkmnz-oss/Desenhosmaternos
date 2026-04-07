@@ -105,7 +105,7 @@ export default function Browse() {
     browseType === 'movie' ? 'Filmes' : browseType === 'series' ? 'Séries' : 'Catálogo';
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
           <h1 className="text-2xl md:text-3xl font-bold">{pageTitle}</h1>
@@ -127,8 +127,8 @@ export default function Browse() {
               onClick={() => setBrowseType(t.id)}
               className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 (browseType === 'all' && t.id === 'all') || browseType === t.id
-                  ? 'bg-[#E50914] text-white'
-                  : 'bg-[#1A1A1A] text-gray-400 hover:bg-[#2A2A2A] hover:text-white'
+                  ? 'bg-kid-accent text-white'
+                  : 'bg-kid-surface text-gray-400 hover:bg-kid-panel hover:text-white'
               }`}
             >
               {t.label}
@@ -145,7 +145,7 @@ export default function Browse() {
               className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 activeCategory === cat
                   ? 'bg-white/15 text-white ring-1 ring-white/30'
-                  : 'bg-[#1A1A1A] text-gray-400 hover:bg-[#2A2A2A] hover:text-white'
+                  : 'bg-kid-surface text-gray-400 hover:bg-kid-panel hover:text-white'
               }`}
             >
               {cat}
@@ -158,7 +158,7 @@ export default function Browse() {
             {Array(12)
               .fill(0)
               .map((_, i) => (
-                <div key={i} className="aspect-[2/3] rounded-lg bg-[#1A1A1A] animate-pulse" />
+                <div key={i} className="aspect-[2/3] rounded-lg bg-kid-surface animate-pulse" />
               ))}
           </div>
         ) : (
@@ -169,7 +169,7 @@ export default function Browse() {
             {filtered.map((s) => (
               <motion.div key={s.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <Link to={`/SeriesDetail?id=${s.id}`} className="group block">
-                  <div className="aspect-[2/3] rounded-lg overflow-hidden bg-[#1A1A1A] relative">
+                  <div className="aspect-[2/3] rounded-lg overflow-hidden bg-kid-surface relative">
                     {s.cover_url ? (
                       <img
                         src={imageUrlWithCacheBust(s.cover_url, s)}
@@ -177,7 +177,7 @@ export default function Browse() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E50914]/20 to-[#1A1A1A] p-2">
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-kid-accent/20 to-kid-surface p-2">
                         <span className="text-xs font-bold text-center">{s.title}</span>
                       </div>
                     )}

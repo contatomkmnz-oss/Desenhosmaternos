@@ -54,13 +54,13 @@ const AuthenticatedApp = () => {
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-[#0F0F0F]">
+      <div className="fixed inset-0 flex items-center justify-center bg-kid-page">
         <div className="text-center">
-          <h1 className="text-3xl font-black mb-4">
-            <span className="text-[#E50914]">KIDS</span>
-            <span className="text-[#FFC107]">Play</span>
+          <h1 className="text-3xl md:text-4xl font-black font-display mb-4 tracking-tight">
+            <span className="text-kid-accent drop-shadow-sm">KIDS</span>
+            <span className="text-kid-sun drop-shadow-sm">Play</span>
           </h1>
-          <div className="w-8 h-8 border-2 border-[#E50914] border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-8 h-8 border-2 border-kid-accent border-t-transparent rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );

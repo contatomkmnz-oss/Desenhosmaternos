@@ -49,7 +49,7 @@ export default function Navbar({ isStackRoute = false }) {
   // Navbar de stack (SeriesDetail, Player) — só mostra botão voltar no mobile
   if (isStackRoute) {
     return (
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0F0F0F]/95 backdrop-blur-md" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-kid-page/95 backdrop-blur-md" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="flex items-center h-14 px-2">
           <button
             onClick={() => navigate(-1)}
@@ -66,7 +66,7 @@ export default function Navbar({ isStackRoute = false }) {
               <Link
                 key={l.to}
                 to={l.to}
-                className={`text-sm font-medium transition-colors hover:text-white ${navLinkActive(l.to) ? 'text-white' : 'text-gray-400'}`}
+                className={`text-sm font-display font-semibold transition-colors hover:text-kid-sun ${navLinkActive(l.to) ? 'text-kid-sun' : 'text-gray-400'}`}
               >
                 {l.label}
               </Link>
@@ -79,7 +79,7 @@ export default function Navbar({ isStackRoute = false }) {
 
   // Navbar padrão (tabs)
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-[#0F0F0F]/95 backdrop-blur-md shadow-2xl' : 'bg-gradient-to-b from-black/80 to-transparent'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-kid-page/95 backdrop-blur-md shadow-lg shadow-kid-accent/10' : 'bg-gradient-to-b from-kid-page/92 via-kid-page/40 to-transparent'}`}>
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <div className="flex items-center gap-8">
@@ -91,7 +91,7 @@ export default function Navbar({ isStackRoute = false }) {
                 <Link
                   key={l.to}
                   to={l.to}
-                  className={`text-sm font-medium transition-colors hover:text-white ${navLinkActive(l.to) ? 'text-white' : 'text-gray-400'}`}
+                  className={`text-sm font-display font-semibold transition-colors hover:text-kid-sun ${navLinkActive(l.to) ? 'text-kid-sun' : 'text-gray-400'}`}
                 >
                   {l.label}
                 </Link>
@@ -100,13 +100,13 @@ export default function Navbar({ isStackRoute = false }) {
           </div>
 
           <div className="flex items-center gap-3 md:gap-5">
-            <Link to="/Search" className="p-2 hover:text-[#E50914] transition-colors">
+            <Link to="/Search" className="p-2 hover:text-kid-accent transition-colors">
               <Search className="w-5 h-5" />
             </Link>
             {enableSubscriptionFlow && (
               <Link
                 to="/Subscription"
-                className={`hidden md:block text-sm font-semibold px-4 py-1.5 rounded-full border transition-all ${location.pathname === '/Subscription' ? 'bg-[#E50914] border-[#E50914] text-white' : 'border-[#E50914] text-[#E50914] hover:bg-[#E50914] hover:text-white'}`}
+                className={`hidden md:block text-sm font-display font-bold px-5 py-2 rounded-full border-2 transition-all shadow-sm ${location.pathname === '/Subscription' ? 'bg-kid-accent border-kid-accent text-white shadow-kid-accent/25' : 'border-kid-sun/60 text-kid-sun hover:bg-kid-sun hover:text-kid-page-deep'}`}
               >
                 Assinar
               </Link>
@@ -114,13 +114,13 @@ export default function Navbar({ isStackRoute = false }) {
             {enableAdminPanel && isAdmin && (
               <>
                 <NotificationCenter />
-                <Link to="/Admin" className="hidden md:block text-xs text-gray-400 hover:text-[#FFC107] transition-colors font-medium">
+                <Link to="/Admin" className="hidden md:block text-xs text-gray-400 hover:text-kid-sun transition-colors font-medium">
                   Admin
                 </Link>
               </>
             )}
             <Link to="/ProfileSelect" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-md overflow-hidden bg-[#E50914] flex items-center justify-center ring-2 ring-transparent group-hover:ring-white/30 transition-all">
+              <div className="w-9 h-9 rounded-full overflow-hidden bg-kid-accent flex items-center justify-center ring-2 ring-kid-sun/40 group-hover:ring-kid-sun/70 transition-all shadow-md">
                 {activeProfile?.avatar_url ? (
                   <ProfileAvatarImage
                     src={activeProfile.avatar_url}

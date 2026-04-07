@@ -105,7 +105,7 @@ export default function AdminPersistence() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
           <Link to="/Admin" className="text-gray-400 hover:text-white">
@@ -118,9 +118,9 @@ export default function AdminPersistence() {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-xl border border-white/10 bg-[#141414] p-5 space-y-3">
+          <div className="rounded-xl border border-white/10 bg-kid-page-deep p-5 space-y-3">
             <div className="flex items-start gap-3">
-              <HardDrive className="w-5 h-5 text-[#E50914] shrink-0 mt-0.5" />
+              <HardDrive className="w-5 h-5 text-kid-accent shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-white">Estado atual</p>
                 <p className="text-sm text-gray-400 mt-1">
@@ -147,7 +147,7 @@ export default function AdminPersistence() {
             </p>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-[#1A1A1A] p-5 space-y-4">
+          <div className="rounded-xl border border-white/10 bg-kid-surface p-5 space-y-4">
             <p className="text-sm text-gray-300">
               {firestoreMode ? (
                 <>
@@ -172,7 +172,7 @@ export default function AdminPersistence() {
             <Button
               type="button"
               onClick={onExport}
-              className="bg-[#E50914] hover:bg-[#FF3D3D]"
+              className="bg-kid-accent hover:bg-kid-accent-hover"
               disabled={busy}
             >
               <Download className="w-4 h-4 mr-2" />

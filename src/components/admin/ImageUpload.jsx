@@ -29,7 +29,7 @@ export default function ImageUpload({ value, onChange, placeholder = "Clique par
     <div className="space-y-2">
       <div
         onClick={() => !uploading && inputRef.current?.click()}
-        className={`relative w-full ${heightClass} rounded-lg overflow-hidden bg-[#2A2A2A] border-2 border-dashed border-white/10 hover:border-white/30 cursor-pointer transition-colors flex items-center justify-center`}
+        className={`relative w-full ${heightClass} rounded-lg overflow-hidden bg-kid-panel border-2 border-dashed border-white/10 hover:border-white/30 cursor-pointer transition-colors flex items-center justify-center`}
       >
         {value ? (
           <>
@@ -41,7 +41,7 @@ export default function ImageUpload({ value, onChange, placeholder = "Clique par
         ) : (
           <div className="flex flex-col items-center gap-2 text-gray-500">
             {uploading ? (
-              <Loader2 className="w-8 h-8 animate-spin text-[#E50914]" />
+              <Loader2 className="w-8 h-8 animate-spin text-kid-accent" />
             ) : (
               <>
                 <Upload className="w-8 h-8" />
@@ -52,7 +52,7 @@ export default function ImageUpload({ value, onChange, placeholder = "Clique par
         )}
         {uploading && (
           <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-[#E50914]" />
+            <Loader2 className="w-8 h-8 animate-spin text-kid-accent" />
           </div>
         )}
       </div>

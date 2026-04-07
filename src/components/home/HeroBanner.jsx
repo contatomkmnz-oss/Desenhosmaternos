@@ -84,7 +84,7 @@ export default function HeroBanner({ slides = [] }) {
       href={slide.playHref}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center justify-center gap-1.5 bg-white text-black px-3 py-2.5 md:px-6 md:py-3 rounded-md font-semibold text-sm md:text-base hover:bg-white/90 transition-all shadow-lg"
+      className="flex items-center justify-center gap-1.5 bg-kid-sun text-kid-page-deep px-3 py-2.5 md:px-6 md:py-3 rounded-2xl font-bold font-display text-sm md:text-base hover:bg-kid-sun-deep hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-kid-sun/25"
     >
       <Play className="w-4 h-4 md:w-5 md:h-5 fill-current" />
       Assistir
@@ -92,7 +92,7 @@ export default function HeroBanner({ slides = [] }) {
   ) : (
     <Link
       to={slide.playHref}
-      className="flex items-center justify-center gap-1.5 bg-white text-black px-3 py-2.5 md:px-6 md:py-3 rounded-md font-semibold text-sm md:text-base hover:bg-white/90 transition-all shadow-lg"
+      className="flex items-center justify-center gap-1.5 bg-kid-sun text-kid-page-deep px-3 py-2.5 md:px-6 md:py-3 rounded-2xl font-bold font-display text-sm md:text-base hover:bg-kid-sun-deep hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-kid-sun/25"
     >
       <Play className="w-4 h-4 md:w-5 md:h-5 fill-current" />
       Assistir
@@ -140,10 +140,10 @@ export default function HeroBanner({ slides = [] }) {
               }}
             />
           ) : (
-            <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#1a0000] via-[#0F0F0F] to-[#1a1a00]" />
+            <div className="absolute inset-0 z-0 bg-gradient-to-br from-kid-accent/30 via-kid-page to-kid-sky/20" />
           )}
-          <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#0F0F0F] via-[#0F0F0F]/40 to-transparent pointer-events-none" />
-          <div className="absolute inset-0 z-[1] bg-gradient-to-r from-[#0F0F0F]/80 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 z-[1] bg-gradient-to-t from-kid-page via-kid-page/40 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 z-[1] bg-gradient-to-r from-kid-page/80 via-transparent to-transparent pointer-events-none" />
         </motion.div>
       </AnimatePresence>
 
@@ -158,7 +158,7 @@ export default function HeroBanner({ slides = [] }) {
             className="max-w-full pr-4 sm:pr-12 md:max-w-2xl text-white opacity-100"
             style={{ opacity: 1 }}
           >
-            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black leading-[1.05] mb-3 md:mb-4 drop-shadow-2xl text-white">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black font-display leading-[1.05] mb-3 md:mb-4 drop-shadow-2xl text-white">
               {slide.title}
             </h1>
             {slide.description && (
@@ -173,7 +173,7 @@ export default function HeroBanner({ slides = [] }) {
               {slide.detailHref && (
                 <Link
                   to={slide.detailHref}
-                  className="flex items-center justify-center gap-1.5 bg-white/20 backdrop-blur-sm text-white px-3 py-2.5 md:px-6 md:py-3 rounded-md font-semibold text-sm md:text-base hover:bg-white/30 transition-all whitespace-nowrap"
+                  className="flex items-center justify-center gap-1.5 bg-white/25 backdrop-blur-md text-white px-3 py-2.5 md:px-6 md:py-3 rounded-2xl font-bold font-display text-sm md:text-base border-2 border-white/30 hover:bg-white/35 transition-all whitespace-nowrap"
                 >
                   <Info className="w-3 h-3 md:w-5 md:h-5" />
                   Mais Informações

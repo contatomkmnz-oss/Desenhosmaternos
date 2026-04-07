@@ -12,7 +12,7 @@ export default function AdminUsers() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center gap-4 mb-6">
           <Link to="/Admin" className="text-gray-400 hover:text-white"><ArrowLeft className="w-5 h-5" /></Link>
@@ -22,8 +22,8 @@ export default function AdminUsers() {
 
         <div className="space-y-2">
           {users.map(u => (
-            <div key={u.id} className="flex items-center gap-4 p-4 bg-[#1A1A1A] rounded-lg">
-              <div className="w-10 h-10 rounded-full bg-[#E50914] flex items-center justify-center shrink-0">
+            <div key={u.id} className="flex items-center gap-4 p-4 bg-kid-surface rounded-lg">
+              <div className="w-10 h-10 rounded-full bg-kid-accent flex items-center justify-center shrink-0">
                 <span className="text-sm font-bold">{u.full_name?.[0] || u.email?.[0] || '?'}</span>
               </div>
               <div className="flex-1 min-w-0">
@@ -31,7 +31,7 @@ export default function AdminUsers() {
                 <p className="text-xs text-gray-400 flex items-center gap-1"><Mail className="w-3 h-3" /> {u.email}</p>
               </div>
               <div className="text-right shrink-0">
-                <span className={`text-xs px-2 py-1 rounded ${u.role === 'admin' ? 'bg-[#FFC107]/20 text-[#FFC107]' : 'bg-white/10 text-gray-300'}`}>
+                <span className={`text-xs px-2 py-1 rounded ${u.role === 'admin' ? 'bg-kid-sun/20 text-kid-sun' : 'bg-white/10 text-gray-300'}`}>
                   {u.role || 'user'}
                 </span>
                 {u.created_date && (

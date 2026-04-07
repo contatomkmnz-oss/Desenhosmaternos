@@ -45,7 +45,7 @@ export const subscriptionPlans = [
     priceValue: 2990,
     period: '/mês',
     iconKey: 'Star',
-    color: 'border-[#E50914]',
+    color: 'border-kid-accent',
     badge: 'Mais Popular',
     features: [
       'Tudo do plano Mensal',
@@ -62,7 +62,7 @@ export const subscriptionPlans = [
     priceValue: 19900,
     period: '/ano',
     iconKey: 'Crown',
-    color: 'border-[#FFC107]',
+    color: 'border-kid-sun',
     badge: 'Melhor Custo-Benefício',
     features: [
       'Tudo do plano Premium',

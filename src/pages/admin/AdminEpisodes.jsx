@@ -132,10 +132,10 @@ export default function AdminEpisodes() {
   const detectedEpisodeSource = buildVideoSource(form.videoUrl);
 
   const videoUrlBlock = (
-    <div className="space-y-2 rounded-lg border border-[#E50914]/30 bg-[#E50914]/5 p-4">
+    <div className="space-y-2 rounded-lg border border-kid-accent/30 bg-kid-accent/5 p-4">
       <p className="text-sm font-semibold text-white">
         {isFilme ? 'URL do vídeo do filme' : 'URL do vídeo'}
-        <span className="text-[#E50914] font-normal"> *</span>
+        <span className="text-kid-accent font-normal"> *</span>
       </p>
       <p className="text-xs text-gray-400 leading-relaxed">
         Cole a URL do vídeo. Bunny.net é prioridade, mas também aceitamos HLS, MP4, Vimeo, YouTube, Google Drive e embeds compatíveis.
@@ -144,7 +144,7 @@ export default function AdminEpisodes() {
         placeholder="https://iframe.mediadelivery.net/embed/... ou https://.../video.m3u8"
         value={form.videoUrl}
         onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
-        className="bg-[#2A2A2A] border border-white/10 text-white"
+        className="bg-kid-panel border border-white/10 text-white"
       />
       <div className="grid grid-cols-2 gap-2 text-[11px]">
         <div className="rounded-md bg-black/20 px-3 py-2 text-gray-300">
@@ -160,14 +160,14 @@ export default function AdminEpisodes() {
         placeholder="Trailer (opcional)"
         value={form.trailerUrl}
         onChange={(e) => setForm({ ...form, trailerUrl: e.target.value })}
-        className="bg-[#2A2A2A] border border-white/10 text-white"
+        className="bg-kid-panel border border-white/10 text-white"
       />
       <p className="text-xs text-gray-500">Detectado: {getVideoSourceLabel(detectedEpisodeSource)}</p>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center gap-4 mb-6">
           <Link to="/AdminSeries" className="text-gray-400 hover:text-white"><ArrowLeft className="w-5 h-5" /></Link>
@@ -177,7 +177,7 @@ export default function AdminEpisodes() {
               <p className="text-sm text-gray-400 flex flex-wrap items-center gap-2 mt-1">
                 <span>{series.title}</span>
                 {isFilme && (
-                  <span className="text-[10px] font-bold uppercase bg-[#E50914]/20 text-[#E50914] px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-bold uppercase bg-kid-accent/20 text-kid-accent px-2 py-0.5 rounded">
                     Adicione a URL do vídeo abaixo
                   </span>
                 )}
@@ -185,29 +185,29 @@ export default function AdminEpisodes() {
             )}
           </div>
           {!isFilme && (
-            <Button onClick={openCreate} className="bg-[#E50914] hover:bg-[#FF3D3D]">
+            <Button onClick={openCreate} className="bg-kid-accent hover:bg-kid-accent-hover">
               <Plus className="w-4 h-4 mr-2" /> Novo Episódio
             </Button>
           )}
         </div>
 
         {isFilme && (
-          <div className="mb-6 rounded-lg border border-[#E50914]/30 bg-[#E50914]/5 p-4 text-sm text-gray-300">
+          <div className="mb-6 rounded-lg border border-kid-accent/30 bg-kid-accent/5 p-4 text-sm text-gray-300">
             A URL principal do filme agora é gerida em <strong>Admin &gt; Séries e Filmes</strong>. Esta tela fica reservada para episódios de séries e compatibilidade com dados antigos.
           </div>
         )}
 
         <div className="space-y-2">
           {sorted.map(ep => (
-            <div key={ep.id} className="flex items-center gap-4 p-3 bg-[#1A1A1A] rounded-lg hover:bg-[#222] transition-colors">
+            <div key={ep.id} className="flex items-center gap-4 p-3 bg-kid-surface rounded-lg hover:bg-kid-surface-hover transition-colors">
               <span className="text-gray-500 font-mono text-sm w-16 shrink-0">
                 T{ep.season || 1}E{ep.number}
               </span>
-              <div className="shrink-0 w-24 aspect-video rounded overflow-hidden bg-[#2A2A2A]">
+              <div className="shrink-0 w-24 aspect-video rounded overflow-hidden bg-kid-panel">
                 {(ep.thumbnail_url || series?.cover_url) ? (
                   <img src={ep.thumbnail_url || series?.cover_url} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full bg-[#2A2A2A]" />
+                  <div className="w-full h-full bg-kid-panel" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
@@ -228,7 +228,7 @@ export default function AdminEpisodes() {
         </div>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="bg-[#1A1A1A] border-white/10 text-white max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogContent className="bg-kid-surface border-white/10 text-white max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {isFilme
@@ -248,20 +248,20 @@ export default function AdminEpisodes() {
                     placeholder="Título (opcional, ex.: Versão estendida)"
                     value={form.title}
                     onChange={(e) => setForm({ ...form, title: e.target.value })}
-                    className="bg-[#2A2A2A] border-none"
+                    className="bg-kid-panel border-none"
                   />
                   <Input
                     type="number"
                     placeholder="Duração em segundos (opcional)"
                     value={form.duration}
                     onChange={(e) => setForm({ ...form, duration: e.target.value })}
-                    className="bg-[#2A2A2A] border-none"
+                    className="bg-kid-panel border-none"
                   />
                   <Textarea
                     placeholder="Descrição (opcional)"
                     value={form.description}
                     onChange={(e) => setForm({ ...form, description: e.target.value })}
-                    className="bg-[#2A2A2A] border-none h-20"
+                    className="bg-kid-panel border-none h-20"
                   />
                 </>
               ) : (
@@ -270,7 +270,7 @@ export default function AdminEpisodes() {
                     placeholder="Título do Episódio"
                     value={form.title}
                     onChange={(e) => setForm({ ...form, title: e.target.value })}
-                    className="bg-[#2A2A2A] border-none"
+                    className="bg-kid-panel border-none"
                   />
                   <div className="grid grid-cols-3 gap-3">
                     <Input
@@ -278,39 +278,39 @@ export default function AdminEpisodes() {
                       placeholder="Temporada"
                       value={form.season}
                       onChange={(e) => setForm({ ...form, season: e.target.value })}
-                      className="bg-[#2A2A2A] border-none"
+                      className="bg-kid-panel border-none"
                     />
                     <Input
                       type="number"
                       placeholder="Número"
                       value={form.number}
                       onChange={(e) => setForm({ ...form, number: e.target.value })}
-                      className="bg-[#2A2A2A] border-none"
+                      className="bg-kid-panel border-none"
                     />
                     <Input
                       type="number"
                       placeholder="Duração (seg)"
                       value={form.duration}
                       onChange={(e) => setForm({ ...form, duration: e.target.value })}
-                      className="bg-[#2A2A2A] border-none"
+                      className="bg-kid-panel border-none"
                     />
                   </div>
                   <Textarea
                     placeholder="Descrição"
                     value={form.description}
                     onChange={(e) => setForm({ ...form, description: e.target.value })}
-                    className="bg-[#2A2A2A] border-none h-20"
+                    className="bg-kid-panel border-none h-20"
                   />
                   {videoUrlBlock}
                   <Input
                     placeholder="URL da Thumbnail"
                     value={form.thumbnail_url}
                     onChange={(e) => setForm({ ...form, thumbnail_url: e.target.value })}
-                    className="bg-[#2A2A2A] border-none"
+                    className="bg-kid-panel border-none"
                   />
                 </>
               )}
-              <Button onClick={handleSubmit} className="w-full bg-[#E50914] hover:bg-[#FF3D3D]">
+              <Button onClick={handleSubmit} className="w-full bg-kid-accent hover:bg-kid-accent-hover">
                 {editing ? 'Salvar Alterações' : isFilme ? 'Guardar filme' : 'Criar'}
               </Button>
             </div>

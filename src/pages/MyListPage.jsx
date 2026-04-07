@@ -34,7 +34,7 @@ export default function MyListPage() {
   }, [myListItems, allSeries]);
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-2xl md:text-3xl font-bold mb-8">Minha Lista</h1>
 
@@ -43,7 +43,7 @@ export default function MyListPage() {
             <Heart className="w-16 h-16 text-gray-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-2">Sua lista está vazia</h3>
             <p className="text-gray-400 mb-6">Adicione séries à sua lista para encontrá-las facilmente.</p>
-            <Link to="/Browse" className="inline-flex items-center gap-2 bg-[#E50914] text-white px-6 py-3 rounded-md font-semibold hover:bg-[#FF3D3D] transition-colors">
+            <Link to="/Browse" className="inline-flex items-center gap-2 bg-kid-accent text-white px-6 py-3 rounded-md font-semibold hover:bg-kid-accent-hover transition-colors">
               Explorar Séries
             </Link>
           </div>
@@ -59,11 +59,11 @@ export default function MyListPage() {
                   className="group relative"
                 >
                   <Link to={`/SeriesDetail?id=${s.id}`}>
-                    <div className="aspect-[2/3] rounded-lg overflow-hidden bg-[#1A1A1A]">
+                    <div className="aspect-[2/3] rounded-lg overflow-hidden bg-kid-surface">
                       {s.cover_url ? (
                         <img src={s.cover_url} alt={s.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E50914]/20 to-[#1A1A1A] p-2">
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-kid-accent/20 to-kid-surface p-2">
                           <span className="text-xs font-bold text-center">{s.title}</span>
                         </div>
                       )}

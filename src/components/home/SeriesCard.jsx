@@ -74,7 +74,7 @@ export default function SeriesCard({
   return (
     <Shell {...shellProps}>
       <Link to={`/SeriesDetail?id=${series.id}`}>
-        <div className="aspect-[2/3] rounded-lg overflow-hidden bg-[#1A1A1A] shadow-lg relative">
+        <div className="aspect-[2/3] rounded-2xl overflow-hidden bg-kid-surface shadow-lg ring-2 ring-white/5 relative">
           {series.cover_url && !coverFailed ? (
             <img
               key={`${series.id}-${series.updated_date || ''}`}
@@ -88,15 +88,15 @@ export default function SeriesCard({
               }`}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E50914]/30 to-[#1A1A1A] p-3">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-kid-accent/35 via-kid-sky/15 to-kid-surface p-3">
               <span className="text-sm font-bold text-center text-white/80">{series.title}</span>
             </div>
           )}
           {showComingSoon && (
             <div className="absolute inset-0 bg-black/60 flex items-end justify-center pb-4">
               <div className="flex flex-col items-center gap-1 px-2 text-center">
-                <Clock className="w-4 h-4 text-[#FFC107]" />
-                <span className="text-[10px] md:text-xs font-bold text-[#FFC107] leading-tight">
+                <Clock className="w-4 h-4 text-kid-sun" />
+                <span className="text-[10px] md:text-xs font-bold font-display text-kid-sun leading-tight">
                   {isMovie(series) ? 'FILME EM BREVE' : 'EPISÓDIOS EM BREVE'}
                 </span>
               </div>
@@ -107,7 +107,7 @@ export default function SeriesCard({
 
       {canHover && hovered && (() => {
         const hoverPanelBody = (
-          <div className="bg-[#1A1A1A] rounded-b-lg p-3 shadow-2xl border-t border-[#E50914]/30">
+          <div className="bg-kid-surface rounded-b-2xl p-3 shadow-2xl border-t-2 border-kid-accent/25">
             <p className="text-xs font-semibold text-white truncate mb-2">{series.title}</p>
             <div className="flex items-center gap-2">
               <Link

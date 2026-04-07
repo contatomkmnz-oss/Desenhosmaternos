@@ -31,7 +31,7 @@ export default function Propose() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] pt-20 md:pt-24 px-4 md:px-12">
+    <div className="min-h-screen bg-kid-page pt-20 md:pt-24 px-4 md:px-12">
       <div className="max-w-lg mx-auto">
         <Link to="/Home" className="flex items-center gap-2 text-gray-400 hover:text-white mb-6">
           <ArrowLeft className="w-4 h-4" /> Voltar
@@ -41,29 +41,29 @@ export default function Propose() {
         <p className="text-gray-400 text-sm mb-6">Sugira um desenho que você gostaria de ver na plataforma!</p>
 
         {sent ? (
-          <div className="text-center py-12 bg-[#1A1A1A] rounded-xl">
+          <div className="text-center py-12 bg-kid-surface rounded-xl">
             <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
             <h2 className="text-xl font-bold mb-2">Sugestão Enviada!</h2>
             <p className="text-gray-400">Obrigado pela sua contribuição. Vamos avaliar sua sugestão.</p>
           </div>
         ) : (
-          <div className="bg-[#1A1A1A] rounded-xl p-6 space-y-4">
+          <div className="bg-kid-surface rounded-xl p-6 space-y-4">
             <Input
               placeholder="Nome do desenho"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="bg-[#2A2A2A] border-none"
+              className="bg-kid-panel border-none"
             />
             <Textarea
               placeholder="Descrição (opcional) - conte-nos mais sobre o desenho"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="bg-[#2A2A2A] border-none h-32"
+              className="bg-kid-panel border-none h-32"
             />
             <Button
               onClick={handleSubmit}
               disabled={loading || !title.trim()}
-              className="w-full bg-[#E50914] hover:bg-[#FF3D3D]"
+              className="w-full bg-kid-accent hover:bg-kid-accent-hover"
             >
               <Send className="w-4 h-4 mr-2" /> Enviar Sugestão
             </Button>

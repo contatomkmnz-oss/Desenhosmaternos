@@ -146,7 +146,7 @@ export default function Home() {
   const mostViewedIds = new Set(maisAssistidosRow.map((s) => s.id));
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F]">
+    <div className="min-h-screen bg-kid-page">
       <HeroBanner slides={heroSlides} />
 
       <div className="-mt-4 md:-mt-20 relative z-10">

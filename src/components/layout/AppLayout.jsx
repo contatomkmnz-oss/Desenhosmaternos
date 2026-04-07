@@ -88,10 +88,10 @@ export default function AppLayout() {
   // Loading
   if (subState === null) {
     return (
-      <div className="min-h-screen bg-[#0F0F0F] text-white">
+      <div className="min-h-screen bg-kid-page text-white">
         <Navbar />
         <div className="flex items-center justify-center min-h-[80vh]">
-          <div className="w-8 h-8 border-2 border-[#E50914] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-kid-accent border-t-transparent rounded-full animate-spin" />
         </div>
       </div>
     );
@@ -103,7 +103,7 @@ export default function AppLayout() {
   const showWall = enableSubscriptionFlow && !isFreeRoute && !isAdmin && !isActive;
 
   return (
-    <div className="min-h-screen bg-[#0F0F0F] text-white">
+    <div className="min-h-screen bg-kid-page text-white">
       <Navbar isStackRoute={isStackRoute} />
       {showWall ? (
         <SubscriptionWall isTrial={isTrial} />

@@ -30,10 +30,10 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0F0F0F]/97 backdrop-blur-md border-t border-white/10"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-kid-page/98 backdrop-blur-lg border-t-2 border-kid-accent/25 rounded-t-3xl shadow-[0_-12px_40px_rgba(26,22,56,0.45)]"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="flex items-center justify-around h-14">
+      <div className="flex items-center justify-around h-16 pt-1">
         {tabs.map(({ to, icon: Icon, label }) => {
           const active =
             to === '/Browse'
@@ -51,7 +51,7 @@ export default function BottomNav() {
               {active && (
                 <motion.div
                   layoutId="tab-indicator"
-                  className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-[#E50914] rounded-full"
+                  className="absolute top-1 left-1/2 -translate-x-1/2 w-10 h-1 bg-kid-sun rounded-full shadow-sm shadow-kid-sun/40"
                   transition={{ type: 'spring', stiffness: 500, damping: 40 }}
                 />
               )}
@@ -60,8 +60,8 @@ export default function BottomNav() {
                 transition={{ duration: 0.1 }}
                 className="flex flex-col items-center gap-0.5"
               >
-                <Icon className={`w-5 h-5 transition-colors duration-150 ${active ? 'text-[#E50914]' : 'text-gray-500'}`} />
-                <span className={`text-[10px] font-medium transition-colors duration-150 ${active ? 'text-[#E50914]' : 'text-gray-500'}`}>
+                <Icon className={`w-6 h-6 transition-colors duration-150 ${active ? 'text-kid-sun' : 'text-gray-500'}`} />
+                <span className={`text-[10px] font-display font-bold transition-colors duration-150 ${active ? 'text-kid-sun' : 'text-gray-500'}`}>
                   {label}
                 </span>
               </motion.div>
